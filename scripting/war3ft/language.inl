@@ -230,5 +230,11 @@ LANG_GetSkillInfo( skill_id, id, skill_description[], len )
 		case SKILL_CARRIONBEETLES:		formatex ( skill_description, len, "%L", id, "SKILL_I_33" );
 		case ULTIMATE_LOCUSTSWARM:		formatex ( skill_description, len, "%L", id, "SKILL_I_34" );
 		case PASS_ORB:					formatex ( skill_description, len, "%L", id, "SKILL_I_35" );
+
+    // Necromancer
+    case SKILL_UNHOLY_RESURRECTION:     formatex ( skill_description, len, "%L", id, "SKILL_I_36" );
+    case SKILL_BLACK_MANA:              formatex ( skill_description, len, "%L", id, "SKILL_I_37" );
+    case SKILL_EYE_OF_INSIGHT:          formatex ( skill_description, len, "%L", id, "SKILL_I_38" );
+    case ULTIMATE_BRAIN_SAP:        formatex ( skill_description, len, "%L", id, "SKILL_I_39" );
 	}
 }

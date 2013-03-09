@@ -238,6 +238,21 @@ public cmd_Ultimate(id)
 
 			CL_ULT_LocustSwarm( id );
 		}
+        case ULTIMATE_BRAIN_SAP:
+        {
+            if ( !p_data_b[id][PB_ISSEARCHING] )
+            {
+                p_data_b[id][PB_ISSEARCHING] = true;
+                // Don't continue if task already exists...
+                if ( !task_exists( TASK_ULTPING + id ) )
+                {
+                    new parm[2];
+                    parm[0] = id;
+                    parm[1] = 5;
+                    _ULT_Ping( parm );
+                }
+            }
+        }
 	}
 
 	return PLUGIN_HANDLED;
@@ -541,7 +556,10 @@ CMD_Handle( id, szCmd[], bool:bThroughSay )
 
 		else if ( CMD_Equal( id,  szCmd, "ability" ) )
 		{
-			SH_PlaceSerpentWard( id );
+            switch (p_data[id][P_RACE]) {
+                case RACE_SHADOW: SH_PlaceSerpentWard(id);
+                case RACE_NECROMANCER: respawn_menu(id);
+            }
 		}
 
 		else if ( CMD_Equal( id,  szCmd, "shopmenu2" ) )

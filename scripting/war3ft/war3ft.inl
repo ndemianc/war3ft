@@ -56,6 +56,8 @@ public WC3_Precache()
 
 	copy( g_szSounds[SOUND_DISPELL]			, 63, "warcraft3/DispelMagicTarget.wav"				);	// Dispell an ultimate - played on caster
 	copy( g_szSounds[SOUND_SPELLSHIELD]		, 63, "warcraft3/SpellShieldImpact1.wav"			);	// Dispell an ultimate - played on blocker
+    copy( g_szSounds[SOUND_RESPAWN]         , 63, "warcraft3/respawn_necroumancer.wav"          );  // Скилл некроманта воскрешение
+    copy( g_szSounds[SOUND_RESPAWNED]       , 63, "warcraft3/respawned_necroumancer.wav"        );  // Скилл некроманта воскрешение ( проигрывается у воскрешенного)
 
 
 	// Lets make sure we have all of the sound files!!!
@@ -125,6 +127,7 @@ public WC3_Precache()
 	copy( g_szRaceSprites[RACE_WARDEN]		, 63, "sprites/warcraft3/races/wc3_warden_01.spr"	);
 	copy( g_szRaceSprites[RACE_CRYPT]		, 63, "sprites/warcraft3/races/wc3_cryptlord_01.spr"	);
 	copy( g_szRaceSprites[RACE_CHAMELEON]	, 63, "sprites/warcraft3/races/wc3_chameleon_01.spr"	);
+    copy( g_szRaceSprites[RACE_NECROMANCER] , 63, "sprites/warcraft3/races/wc3_chameleon_01.spr"    );
 
 	// Store level sprite names
 	for ( i = 0; i < MAX_LEVELS + 1; i++ )
@@ -1588,6 +1591,9 @@ WC3_InitPlayerSkills( id )
 	// Warden's Blink
 	WA_Blink( id );
 
+    // Necromancer Black Mana
+    NM_BlackMana( id );
+
 	// Stop all ultimates if the user shouldn't have an ultimate!
 	new iUltimateID = SM_GetSkillOfType( id, SKILL_TYPE_ULTIMATE );
 	if ( iUltimateID > -1 && SM_GetSkillLevel( id, iUltimateID, 9 ) <= 0 )
@@ -1674,6 +1680,9 @@ WC3_PostSpawn( id )
 
 	// Give the user their item bonuses!
 	ITEM_GiveAllBonuses( id );
+
+    //Reset menu use
+    g_F_counter[id] = 0;
 
 	// Check for Counter-Strike or Condition Zero
 	if ( g_MOD == GAME_CSTRIKE || g_MOD == GAME_CZERO )

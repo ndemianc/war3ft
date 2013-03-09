@@ -3,7 +3,7 @@
 #define ICON_SHOW 1 
 #define ICON_FLASH 2 
 
-new g_UltimateIcons[8][32] = 
+new g_UltimateIcons[10][32] = 
 					{
 						"dmg_rad",				// Undead
 						"item_longjump",		// Human Alliance
@@ -12,7 +12,9 @@ new g_UltimateIcons[8][32] =
 						"dmg_heat",				// Blood Mage
 						"suit_full",			// Shadow Hunter
 						"cross",				// Warden
-						"dmg_gas"				// Crypt Lord
+						"dmg_gas",				// Crypt Lord
+            "",                 // Chameleon
+            "brain_sap"        // Necromancer
 					};
 
 new g_ULT_iLastIconShown[33];				// Stores what the last icon shown was for each user (race #)

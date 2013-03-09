@@ -4,7 +4,7 @@
 
 
 #define INVIS_CLOAK_DIVISOR		1.5
-
+#define TASK_GLOW_SHELL 6547    // Calls glow_change
 
 #define DOD_REINC_READY				0
 #define DOD_REINC_JUSTJOINED		1

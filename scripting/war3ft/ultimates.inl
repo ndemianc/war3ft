@@ -145,6 +145,8 @@ ULT_Icon( id, flag )
 			case 6: r=0,	g=200,	b=200;		// Shadow Hunter
 			case 7: r=255,	g=0,	b=0;		// Warden
 			case 8: r=0,	g=255,	b=0;		// Crypt Lord
+            case 9: r=0,    g=0,    b=0;        // Chameleon
+            case 10: r=196,   g=0,    b=255;    // Necromancer
 		}
 			
 		// Special circumstances should be done here

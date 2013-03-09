@@ -20,8 +20,18 @@ public grenade_throw( index, greindex, wId )
 		ITEM_Glove_Begin( index );
 	}
 
-	static iSkillLevel;
-	iSkillLevel = SM_GetSkillLevel( index, SKILL_CRITICALGRENADE );
+	static iSkillLevel, iSkillLevel2;
+    iSkillLevel = SM_GetSkillLevel( index, SKILL_CRITICALGRENADE );
+    iSkillLevel2 = SM_GetSkillLevel( index, SKILL_EYE_OF_INSIGHT );
+
+    if ( greindex && (iSkillLevel2 > 0) )
+    {
+        if ( SHARED_IsGrenadeFlash( wId ) )
+        {
+            new iWidth = 15;
+            Create_TE_BEAMFOLLOW( greindex, g_iSprites[SPR_TRAIL], 20, iWidth, 20, 70, 120, 255 );
+        }
+    }
 
 	// Make sure the user has the skill and we actually have a grenade index
 	if ( greindex && iSkillLevel > 0 )
@@ -390,6 +400,9 @@ public on_ResetHud( id )
 
 	// Store the player's team!
 	g_iPlayerTeam[id] = get_user_team( id );
+    
+    // Кол-во использований функций в расах
+    g_F_counter[id] = 0;
 
 	// We're forcibly respawning the player - so lets just return
 	if ( bIgnorePlayerSpawning[id] )
@@ -551,6 +564,10 @@ public TRIGGER_TraceLine( Float:v1[3], Float:v2[3], noMonsters, pentToSkip )
 						{
 							BM_ULT_Immolate( iAttacker, iVictim );
 						}
+                        else if ( SM_GetSkillLevel( iAttacker, ULTIMATE_BRAIN_SAP) > 0 )
+                        {
+                            NM_ULT_Brain_Sap( iAttacker, iVictim );
+                        }
 					}
 
 					// No longer searching since we found a target

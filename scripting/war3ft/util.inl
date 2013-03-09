@@ -111,6 +111,8 @@ UTIL_GetWeaponName( iWeapon, szWpnName[], len )
 		case CSW_ORB:			LANG_GetSkillName( PASS_ORB					, LANG_SERVER	, szWpnName	, len, 17	);
 		case CSW_CONCOCTION:	LANG_GetSkillName( PASS_UNSTABLECONCOCTION	, LANG_SERVER	, szWpnName	, len, 18	);
 		case CSW_BANISH:		LANG_GetSkillName( SKILL_BANISH				, LANG_SERVER	, szWpnName , len, 19	);
+    case CSW_EYE_OF_INSIGHT:    LANG_GetSkillName( SKILL_EYE_OF_INSIGHT, LANG_SERVER, szWpnName, len, 20 );
+    case CSW_BRAIN_SAP:         LANG_GetSkillName( ULTIMATE_BRAIN_SAP,   LANG_SERVER, szWpnName, len, 21 );
 	}
 }
 

@@ -1,7 +1,56 @@
 /*
 *	Shared Functions
 */
+bool:SHARED_IsGrenadeFlash( iWeapon )
+{
+    if ( g_MOD == GAME_CSTRIKE || g_MOD == GAME_CZERO )
+    {
+        if ( iWeapon == CSW_FLASHBANG )
+        {
+            return true;
+        }
+    }
 
+    return false;
+}
+
+
+//Подсветка игрока нужным цветом
+SHARED_GlowShell(idUser, iRed, iGreen, iBlue,Float:fTime,iAmountGlow = 16)
+{
+    if (!p_data_b[idUser][PB_CAN_RENDER] || !p_data_b[idUser][PB_ISCONNECTED] )
+        return;
+        
+    // Don't glow if invisible
+    else if ( SM_GetSkillLevel( idUser, SKILL_INVISIBILITY ) > 0 || ITEM_Has( idUser, ITEM_CLOAK ) > ITEM_NONE) // Для talisman +
+    {
+        return;
+    }
+    
+    // Only glow if the task doesn't exist!
+    else if ( task_exists( TASK_GLOW_SHELL + idUser ) )
+        return;
+        
+    //set_user_rendering(idUser, kRenderFxGlowShell,iRed,iGreen,iBlue, kRenderNormal, 16 );
+    set_user_rendering(idUser, kRenderFxGlowShell,iRed,iGreen,iBlue, kRenderNormal, iAmountGlow );
+
+    set_task(fTime, "SHARED_GlowShell_OFF", TASK_GLOW_SHELL + idUser );
+}
+//Выключение подсветки игрока
+public SHARED_GlowShell_OFF( idUser )
+{
+    if ( idUser >= TASK_GLOW_SHELL )
+        idUser -= TASK_GLOW_SHELL;
+
+    // User is no longer connected, so lets not continue this!
+    if ( !p_data_b[idUser][PB_ISCONNECTED] )
+        return;
+    
+    // No more glowing!
+    set_user_rendering( idUser );
+
+    return;
+}
 
 // This should be called on weapon change, on new round, when the user selects a new skill, and after an item is purchased
 public SHARED_INVIS_Set( id )

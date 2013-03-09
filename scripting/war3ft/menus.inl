@@ -513,8 +513,9 @@ public MENU_ChangeRace( id, iRaceXP[MAX_RACES] )
 	}
 
 	iKeys |= (1<<i);
-	
-	// This is needed so we can make the Auto-Select option "0" if the number of races is 9
+    
+    /*
+    // This is needed so we can make the Auto-Select option "0" if the number of races is 9
 	if ( get_pcvar_num( CVAR_wc3_races ) == 9 )
 	{
 		i = -1;
@@ -529,7 +530,8 @@ public MENU_ChangeRace( id, iRaceXP[MAX_RACES] )
 
 		pos += format( szMenu[pos], 512-pos, "^n\w0. %L", id, "WORD_CANCEL" );
 	}
-	
+    */
+
 	// Show the menu to the user!
 	show_menu( id, iKeys, szMenu, -1 );
 
@@ -556,23 +558,29 @@ public _MENU_ChangeRace( id, key )
 	{
 		return PLUGIN_HANDLED;
 	}
-	
-	// User pressed 0 (cancel)
+
+    /*
+    // User pressed 0 (cancel)
 	if ( get_pcvar_num( CVAR_wc3_races ) < 9 && key - 1 == get_pcvar_num( CVAR_wc3_races ) )
 	{
 		return PLUGIN_HANDLED;
 	}
+    */
 
 	// Save the current race data before we change
 	DB_SaveXP( id, false );
 
-	new iRace, iAutoSelectKey = KEY_0;
+	// new iRace, iAutoSelectKey = KEY_0;
+    new iRace;
 	
+    /*
 	if ( get_pcvar_num( CVAR_wc3_races ) != 9 )
 	{
 		iAutoSelectKey = get_pcvar_num( CVAR_wc3_races )
 	}
-	
+	*/
+
+    /*    
 	// Auto select a race
 	if ( key == iAutoSelectKey )
 	{
@@ -584,6 +592,8 @@ public _MENU_ChangeRace( id, key )
 	{
 		iRace = key + 1;
 	}
+    */
+    iRace = key + 1;
 
 	// User currently has a race
 	if ( p_data[id][P_RACE] != 0 )

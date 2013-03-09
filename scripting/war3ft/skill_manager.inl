@@ -45,6 +45,10 @@ SM_Init()
 	g_SkillOwner[ULTIMATE_LOCUSTSWARM		]	= RACE_CRYPT;
 	g_SkillOwner[PASS_ORB					]	= RACE_CRYPT;
 
+    g_SkillOwner[SKILL_UNHOLY_RESURRECTION  ]   = RACE_NECROMANCER;
+    g_SkillOwner[SKILL_BLACK_MANA           ]   = RACE_NECROMANCER;
+    g_SkillOwner[SKILL_EYE_OF_INSIGHT       ]   = RACE_NECROMANCER;
+    g_SkillOwner[ULTIMATE_BRAIN_SAP         ]   = RACE_NECROMANCER;
 
 	// Set up the skill types
 	g_SkillType[SKILL_VAMPIRICAURA			]	= SKILL_TYPE_TRAINABLE;
@@ -91,6 +95,10 @@ SM_Init()
 	g_SkillType[ULTIMATE_LOCUSTSWARM		]	= SKILL_TYPE_ULTIMATE;
 	g_SkillType[PASS_ORB					]	= SKILL_TYPE_PASSIVE;
 
+    g_SkillType[SKILL_UNHOLY_RESURRECTION   ]   = SKILL_TYPE_TRAINABLE;
+    g_SkillType[SKILL_BLACK_MANA            ]   = SKILL_TYPE_TRAINABLE;
+    g_SkillType[SKILL_EYE_OF_INSIGHT        ]   = SKILL_TYPE_TRAINABLE;
+    g_SkillType[ULTIMATE_BRAIN_SAP          ]   = SKILL_TYPE_ULTIMATE;
 
 	// Set up the skill order
 	g_SkillOrder[SKILL_VAMPIRICAURA			]	= SKILL_POS_1;
@@ -136,6 +144,11 @@ SM_Init()
 	g_SkillOrder[SKILL_CARRIONBEETLES		]	= SKILL_POS_3;
 	g_SkillOrder[ULTIMATE_LOCUSTSWARM		]	= SKILL_POS_4;
 	g_SkillOrder[PASS_ORB					]	= SKILL_POS_NONE;
+
+    g_SkillOrder[SKILL_UNHOLY_RESURRECTION  ]   = SKILL_POS_1;
+    g_SkillOrder[SKILL_BLACK_MANA           ]   = SKILL_POS_2;
+    g_SkillOrder[SKILL_EYE_OF_INSIGHT       ]   = SKILL_POS_3;
+    g_SkillOrder[ULTIMATE_BRAIN_SAP         ]   = SKILL_POS_4;
 }
 
 /***** NEW SKILL SET UP BELOW!! *****/
@@ -622,6 +635,10 @@ SM_SkillSet( id, iSkillID )
 		{
 			WA_Blink( id );
 		}
+        case SKILL_BLACK_MANA:              // Черная магия
+        {
+            NM_BlackMana( id );
+        }
 	}
 
 	return;

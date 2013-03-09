@@ -4,6 +4,7 @@
 // in this plugin
 // ***************************************************************************
 
+new g_F_counter[33];    // number of respawn use for RACE_NECROMANCER
 #define TASK_ITEMS			0		// Showing items in the HUD
 #define TASK_SPAWN			32		// Respawning from revive
 #define TASK_IMPALE			64		// Crypt Lord's Impale
@@ -82,6 +83,7 @@
 #define TASK_MOLEFIX		3000
 #define TASK_RESETSPAWNS	3001
 #define TASK_UDELAY			3002		// Ultimate delay function
+#define TASK_BLACK_MANA     3034 // Delay for RACE_NECROMANCER
 
 // From ../multiplayer source/dlls/player.cpp
 #define ARMOR_RATIO	 0.7	// Armor Takes 30% of the damage (was .2 in the SDK)
@@ -177,11 +179,13 @@
 #define CSW_ORB					60
 #define CSW_CONCOCTION			61
 #define CSW_BANISH				62
+#define CSW_EYE_OF_INSIGHT      63
+#define CSW_BRAIN_SAP           64
 
-#define CSW_WAR3_MAX			62
+#define CSW_WAR3_MAX			64
 
-// Should be equal to (CSW_WAR3_MIN - CSW_WAR3_MAX) + 1
-#define MAX_CSW_S				12
+// Should be equal to (CSW_WAR3_MAX - CSW_WAR3_MIN) + 1
+#define MAX_CSW_S				14
 
 // Race numbers
 #define RACE_NONE				0
@@ -194,6 +198,7 @@
 #define RACE_WARDEN				7
 #define RACE_CRYPT				8
 #define RACE_CHAMELEON			9
+#define RACE_NECROMANCER    10
 
 // team ids 
 #define UNASSIGNED 0 
@@ -235,7 +240,7 @@
 //#define DISPLAYLEVEL_SHOWBOTH		3
 #define	DISPLAYLEVEL_SHOWRACECHAT	4
 
-#define MAX_RACES					9
+#define MAX_RACES					10
 
 #define MAX_LEVELS					40
 
@@ -547,7 +552,13 @@ new bool:g_bAnkhDisabled = false;
 #define ULTIMATE_LOCUSTSWARM	34
 #define PASS_ORB				35
 
-#define MAX_SKILLS				36
+// RACE_NECROMANCER
+#define SKILL_UNHOLY_RESURRECTION   36
+#define SKILL_BLACK_MANA            37
+#define SKILL_EYE_OF_INSIGHT        38
+#define ULTIMATE_BRAIN_SAP          39
+
+#define MAX_SKILLS				40
 #define MAX_RACE_SKILLS         13
 #define MAX_SKILL_LEVEL			13
 #define MAX_ULTIMATE_LEVEL		1
@@ -613,6 +624,11 @@ new const Float:p_spiked[13] =			{0.05,0.10,0.15,0.16,0.1625,0.165,0.1675,0.17,0
 new const Float:p_carrion[13] =			{0.05,0.10,0.15,0.16,0.1625,0.165,0.1675,0.17,0.1725,0.175,0.1775,0.18,0.1825}		// Carrion Beetle			(skill 3)
 new const Float:p_orb[41] =				{0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.10,0.15,0.1525,0.155,0.1575,0.16,0.1625,0.165,0.1675,0.17,0.1725,0.175,0.1775,0.18,0.1825,0.185,0.1875,0.19,0.1925,0.195,0.1975,0.2,0.2025,0.205,0.2075,0.21,0.2125,0.215,0.2175,0.22,0.2225,0.225}	// Orb of Annihilation	(Skill 4)
 */
+
+// RACE_NECROMANCER
+new const Float:p_eye_of_insight[MAX_SKILL_LEVEL]  = {0.05,0.1,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25};    // RСкилл Око прозрения
+new const Float:p_black_mana[MAX_SKILL_LEVEL]    = {13.0,12.0,11.0,10.0,9.0,8.0,7.0,6.0,5.0,4.0,3.0,2.0,1.0};            // Скилл черная магия
+new const Float:p_unholy_resurrection[MAX_SKILL_LEVEL]  = {0.17,0.20,0.23,0.25,0.35,0.40,0.45,0.55,0.65,0.75,0.85,0.95,1.00};   // Возраждение мертвых
 
 new const Float:p_vampiric[MAX_SKILL_LEVEL] = {0.05,
 0.1,
@@ -1116,7 +1132,7 @@ new MOTD_header[] = "<html><meta charset=UTF-8><head><LINK REL=^"StyleSheet^" HR
 
 
 // SOUNDS
-#define MAX_SOUNDS	29
+#define MAX_SOUNDS  31
 
 new g_szSounds[MAX_SOUNDS][64];
 
@@ -1149,6 +1165,9 @@ new g_szSounds[MAX_SOUNDS][64];
 #define SOUND_ERROR				26
 #define SOUND_DISPELL			27
 #define SOUND_SPELLSHIELD		28
+
+#define SOUND_RESPAWN       29
+#define SOUND_RESPAWNED     30
 
 // SPRITES
 #define MAX_SPRITES	15
