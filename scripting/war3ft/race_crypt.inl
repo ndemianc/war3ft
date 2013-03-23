@@ -211,10 +211,6 @@ public _CL_ULT_LocustEffect( parm[] )
 		
 		new Float:fTime = 0.2;
 
-		if ( g_MOD == GAME_DOD )
-		{
-			fTime = 0.5;
-		}
 
 		set_task( fTime, "_CL_ULT_LocustEffect", iAttacker + TASK_FUNNELS, parm, 5 );
 	}
@@ -268,7 +264,7 @@ CL_SkillsOffensive( iAttacker, iVictim, iHitPlace )
 	if ( iSkillLevel > 0 )
 	{
 
-		if ( random_float( 0.0, 1.0 ) <= p_orb[p_data[iAttacker][P_LEVEL]] )
+		if ( random_float( 0.0, 1.0 ) <= p_orb[p_data[iAttacker][P_LEVEL-1]] )
 		{
 			new vVictimOrigin[3];
 			get_user_origin( iVictim, vVictimOrigin );
@@ -292,12 +288,16 @@ CL_SkillsOffensive( iAttacker, iVictim, iHitPlace )
 		}
 	}
 
-	// Carrion Beetles
+	//CSSB
+	new iSL = 2;
+	// Carrion Beetles (Жуки)
 	iSkillLevel = SM_GetSkillLevel( iAttacker, SKILL_CARRIONBEETLES );
 	if ( iSkillLevel > 0 )
 	{
+		if ( iSkillLevel < 2)
+			iSL = 1;
 
-		if ( random_float( 0.0, 1.0 ) <= p_carrion[iSkillLevel-1] )
+		if ( random_float( 0.0, 1.0 ) <= p_carrion[iSkillLevel-iSL] )
 		{
 			new vVictimOrigin[3], vAttackerorigin[3];
 			get_user_origin( iVictim, vVictimOrigin );
@@ -353,12 +353,15 @@ CL_SkillsDefensive( iAttacker, iVictim, iDamage, iHitPlace )
 
 	static iSkillLevel;
 
+	new iSL = 2;
 	// Spiked Carapace
 	iSkillLevel = SM_GetSkillLevel( iVictim, SKILL_SPIKEDCARAPACE );
 	if ( iSkillLevel > 0 )
 	{
 
-		new iTemp = floatround( float( iDamage ) * p_spiked[iSkillLevel-1] );
+		if ( iSkillLevel < 2)
+			iSL = 1;
+		new iTemp = floatround( float( iDamage ) * p_spiked[iSkillLevel-iSL] );
 		
 		// Give the victim some armor...
 		if ( g_MOD == GAME_CSTRIKE || g_MOD == GAME_CZERO )

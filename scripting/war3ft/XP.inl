@@ -775,8 +775,9 @@ stock XP_Give( id, iBonusXP )
 	if ( iBonusXP != 0 )
 	{
 		// sdemian
-		// new Float:fCurrentLevel = float( p_data[id][P_LEVEL] );
-		new Float:iLevelMultiplier = ( 1.0 / float(MAX_LEVELS) + 0.7 );
+		new Float:fCurrentLevel = float( p_data[id][P_LEVEL] );
+		// new Float:iLevelMultiplier = ( 1.0 / float(MAX_LEVELS) + 1.0 );
+		new Float:iLevelMultiplier = 1.0 - ((1.0 - float(MAX_LEVELS) - (1.0 - fCurrentLevel)) / float(MAX_LEVELS)) + (1 - fCurrentLevel / float(MAX_LEVELS))
 		new iRealBonusXP = floatround(iLevelMultiplier * iBonusXP);
 		
 		p_data[id][P_XP] += iRealBonusXP;

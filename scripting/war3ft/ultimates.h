@@ -14,7 +14,7 @@ new g_UltimateIcons[10][32] =
 						"cross",				// Warden
 						"dmg_gas",				// Crypt Lord
             "",                 // Chameleon
-            "brain_sap"        // Necromancer
+            "item_battery"        // Necromancer
 					};
 
 new g_ULT_iLastIconShown[33];				// Stores what the last icon shown was for each user (race #)

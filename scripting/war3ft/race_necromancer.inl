@@ -173,10 +173,11 @@ public FlashEvent(id) {
 
 
     new Duration, HoldTime, Fade, Alpha;
-    Duration = read_data(1)
-    HoldTime = read_data(2)
-    Fade = read_data(3)
-    Alpha = read_data(7)
+    Duration = read_data(1);
+    HoldTime = read_data(2);
+    Fade = read_data(3);
+    Alpha = read_data(7);
+    Alpha = Alpha>50?Alpha-50:50;
 
     new players[32], numberofplayers, targetid;
     new iTeam = get_user_team(id);
@@ -221,31 +222,37 @@ public FlashEvent(id) {
                             SHARED_GlowShell(id, 0, 255, 255, 2.0, 18);
                             p_data_b[id][PB_STUNNED] = true;
                             SHARED_SetSpeed(id);
-                            set_task(2.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + id);
+                            set_task(1.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + id);
                         }
                     } else {
                         message_begin(MSG_ONE, gmsgScreenFade, {
                             0, 0, 0
                         }, id)
-                        write_short(Duration) // Duration
-                        write_short(HoldTime) // Hold time
-                        write_short(Fade) // Fade type
+                        write_short(0) // Duration
+                        write_short(0) // Hold time
+                        write_short(0) // Fade type
                         write_byte(0) // Red
-                        write_byte(255) // Green
-                        write_byte(255) // Blue
-                        write_byte(Alpha) // Alpha
+                        write_byte(0) // Green
+                        write_byte(0) // Blue
+                        write_byte(0) // Alpha
                         message_end()
 
                         if (!SHARED_IsPlayerSlowed(id)) {
                             SHARED_GlowShell(id, 0, 255, 255, 2.0, 18);
                             p_data_b[id][PB_STUNNED] = true;
                             SHARED_SetSpeed(id);
-                            set_task(2.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + id);
+                            set_task(1.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + id);
                         }
+                        
+                        static Float:punchangle[3];
+                        pev(id, pev_punchangle, punchangle);
+        
+                        punchangle[0] += random_float(-5.0, 5.0);
+                        punchangle[1] += random_float(-5.0, 5.0);
+                        punchangle[2] += random_float(-5.0, 5.0);
 
-                        set_pev(id, pev_punchangle, Float: {
-                            125.0, 125.0, 125.0
-                        })
+                        // this will shake the user's monitor a little bit
+                        set_pev(id, pev_punchangle, punchangle);
 
                         new iDamage, iBonusDamage;
                         iBonusDamage = 110;

@@ -735,3 +735,146 @@ public disable_minmodels(id)
 {
 	client_cmd(id, "cl_minmodels 0");
 }
+
+/*
+ * sdemian
+ * This part is for items drop
+*/
+public pfn_touch(ptr, ptd) {
+	if (!ptr || !is_user_connected(ptd)) return;
+
+	new itemClassName[33], playerClassname[33];
+	entity_get_string(ptr, EV_SZ_classname, itemClassName, 32);
+	entity_get_string(ptd, EV_SZ_classname, playerClassname, 32);
+
+	if (equal(itemClassName, "madness_drop") && equal(playerClassname, "player")) {
+		new id = ptd;
+		new min_xp = 50;
+		new max_xp = 999;
+		new min_hp = 8;
+		new max_hp = 8;
+		new xp_amount = 0;
+		new money_amount = 0;
+		new iBonusHealth = 0;
+		/*
+		 * choise can be:
+		 * 0: xp
+		 * 1: money
+		 * 2: hp
+		*/
+		new choise; 
+		new owner = entity_get_edict(ptr, EV_ENT_owner);
+		if (g_iShopMenuItems[id][ITEM_SLOT_ONE] != ITEM_NONE && g_iShopMenuItems[id][ITEM_SLOT_TWO] != ITEM_NONE) {
+			choise = random(3);
+			if (choise == 0) {
+				xp_amount += (min_xp + random(max_xp));
+			} else if (choise == 1) {
+				if (dropitem1[owner] != ITEM_NONE) {
+					money_amount += floatround(0.5 * (ITEM_Cost(id, dropitem1[owner])));
+				}
+				if (dropitem2[owner] != ITEM_NONE) {
+					money_amount += floatround(0.5 * (ITEM_Cost(id, dropitem2[owner])));
+				}
+			} else if (choise == 2) {
+				iBonusHealth += (min_hp + random(max_hp));
+			}
+		} else {
+			if (g_iShopMenuItems[id][ITEM_SLOT_ONE] == ITEM_NONE && g_iShopMenuItems[id][ITEM_SLOT_TWO] == ITEM_NONE) {
+				if (dropitem1[owner] != ITEM_NONE) {
+					ITEM_GiveItem(id, dropitem1[owner]);
+				}
+				if (dropitem2[owner] != ITEM_NONE) {
+					ITEM_GiveItem(id, dropitem2[owner]);
+				}
+			} else {
+				if (dropitem1[owner] != ITEM_NONE) {
+					if ((g_iShopMenuItems[id][ITEM_SLOT_ONE] == dropitem1[owner] || g_iShopMenuItems[id][ITEM_SLOT_ONE] == dropitem1[owner]) 
+						&& g_iFlag[g_iShopMenuItems[id][ITEM_SLOT_ONE]] != ITEM_CHARGEABLE) {
+						// so we give randomly xp or money or health
+						choise = random(3);
+						if (choise == 0) {
+							xp_amount += (min_xp + random(max_xp));
+						} else if (choise == 1) {
+							money_amount += floatround(0.5 * (ITEM_Cost(id, dropitem1[owner])));
+						} else if (choise == 2){
+							iBonusHealth += (min_hp + random(max_hp));
+						}
+					} else {
+						if (g_iShopMenuItems[id][ITEM_SLOT_ONE] == ITEM_NONE) {
+							ITEM_GiveItem(id, dropitem1[owner]);
+						} else {
+							if (g_iShopMenuItems[id][ITEM_SLOT_TWO] == ITEM_NONE) {
+								ITEM_GiveItem(id, dropitem1[owner]);
+							}
+						}
+					}
+				}
+				if (dropitem2[owner] != ITEM_NONE) {
+					if ((g_iShopMenuItems[id][ITEM_SLOT_ONE] == dropitem2[owner] || g_iShopMenuItems[id][ITEM_SLOT_ONE] == dropitem2[owner]) 
+						&& g_iFlag[g_iShopMenuItems[id][ITEM_SLOT_ONE]] != ITEM_CHARGEABLE) {
+						// so we give randomly xp or money or health
+						choise = random(3);
+						if (choise == 0) {
+							xp_amount += (min_xp + random(max_xp));
+						} else if (choise == 1) {
+							money_amount += floatround(0.5 * (ITEM_Cost(id, dropitem2[owner])));
+						} else if (choise == 2) {
+							iBonusHealth += (min_hp + random(max_hp));
+						}
+					} else {
+						if (g_iShopMenuItems[id][ITEM_SLOT_ONE] == ITEM_NONE) {
+							ITEM_GiveItem(id, dropitem2[owner]);
+						} else {
+							if (g_iShopMenuItems[id][ITEM_SLOT_TWO] == ITEM_NONE) {
+								ITEM_GiveItem(id, dropitem2[owner]);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if (iBonusHealth > 0) {
+			new iMaxHealth	= get_user_maxhealth( id );
+			new iHealth		= get_user_health( id );
+			// Give the user health!
+			if ( iHealth < iMaxHealth )
+			{
+				// Then give the user his maximum health
+				if ( iHealth + iBonusHealth > iMaxHealth )
+				{
+					set_user_health( id, iMaxHealth );
+				}
+
+				// Otherwise just give iMaxHealth
+				else
+				{
+					set_user_health( id, iHealth + iBonusHealth );
+				}
+				set_hudmessage(153, 204, 50, 0.40, 0.20, 0, 0.1, 2.5, 0.02, 0.02, -1);
+				show_hudmessage(id, "+%d hp", iBonusHealth);
+			} else {
+				// otherwise give +500$
+				xp_amount += 50;
+			}
+
+		}
+		
+		if (xp_amount > 0) {
+			set_hudmessage(0, 40, 80, 0.60, 0.30, 0, 0.1, 2.5, 0.02, 0.02, -1);
+			show_hudmessage(id, "%d xp", xp_amount);
+			ADMIN_SetXP(id, p_data[id][P_XP] + xp_amount);
+		}
+		
+		if (money_amount > 0) {
+			SHARED_SetUserMoney(id, SHARED_GetUserMoney(id) + money_amount, 1);
+			set_hudmessage(255, 99, 71, 0.60, 0.60, 0, 0.1, 2.5, 0.02, 0.02, -1);
+			show_hudmessage(id, "$%d", money_amount);
+		}
+		// create nice green screen fade effect
+		Create_ScreenFade( ptd, (1<<10), (1<<10), (1<<12), 0, 255, 0, 20 );
+		remove_entity(ptr);
+		WC3_ShowBar( id );
+	}
+	return;
+}

@@ -246,6 +246,19 @@ public on_Death( iVictim, iAttacker, iWeaponID, iHeadshot )
 		get_user_origin( iVictim, iReincarnation[iVictim] );
 	}
 
+	
+	/*
+	 * sdemian
+	 * This part is for items drop
+	*/
+	
+	client_print(iVictim, print_console, "Before if statement");
+	if(g_iShopMenuItems[iVictim][ITEM_SLOT_ONE] != ITEM_NONE || g_iShopMenuItems[iVictim][ITEM_SLOT_TWO] != ITEM_NONE) 
+	{
+		client_print(iVictim, print_console, "Before sdemian_create_drop_item");
+    sdemian_create_drop_item(iVictim)
+	}
+	
 	WC3_Death( iVictim, iAttacker, iWeaponID, iHeadshot );
 	
 	return;
@@ -513,6 +526,16 @@ public EVENT_NewRound()
 	}
 
 	g_EndRound = false;
+	
+	/*
+	 * sdemian
+	 * This part is for items drop
+	*/
+	new del_items = 0;
+	do {
+		del_items = find_ent_by_class(del_items,"madness_drop");
+		if(del_items > 0) remove_entity(del_items);
+	} while(del_items);
 }
 
 // Called when a user looks somewhere

@@ -23,13 +23,6 @@ ITEM_Init()
 	ITEM_COST[ITEM_RING]	    = 1000;			// Ring of Regeneration + 1
 	ITEM_COST[ITEM_CHAMELEON]	= 9000;			// Chameleon
 	ITEM_COST[ITEM_MOLE]	    = 12500;		// Mole
-
-	// Item costs are a little different for DOD
-	if ( g_MOD == GAME_DOD )
-	{
-		ITEM_COST[ITEM_SCROLL]	= 800;
-	}
-
 	// Items are chargeable
 	g_iFlag[ITEM_NECKLACE]	|= ITEM_CHARGEABLE;
 	g_iFlag[ITEM_HELM]		|= ITEM_CHARGEABLE;

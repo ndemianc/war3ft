@@ -155,6 +155,12 @@ public WC3_Precache()
 		precache_model( "models/player/guerilla/guerilla.mdl"		);
 		precache_model( "models/player/terror/terror.mdl"			);
 		
+		/*
+		* sdemian
+		* This part is for items drop
+		*/
+		// precache_model("models/warcraft/madness_drop.mdl");
+		precache_model("models/warcraft/madness_drop_v2.mdl");
 		copy( g_szSprites[SPR_SMOKE]		, 63, "sprites/steam1.spr"	);
 		copy( g_szSprites[SPR_SNOW]			, 63, "sprites/snow.spr"	);
 	}
@@ -1946,4 +1952,51 @@ WC3_Log( bool:bAmxx, const fmt[], ... )
 
 	// Write to the war3ft log file as well
 	log_to_file( szLogFile, szFormattedText );
+}
+
+/*
+ * sdemian
+ * This part is for items drop
+*/
+public sdemian_create_drop_item(id) {
+	client_print(id, print_console, "Inside sdemian_create_drop_item");
+	
+	new Float:velocity[3];
+	new Float:color[3];
+	dropitem1[id] = g_iShopMenuItems[id][ITEM_SLOT_ONE];
+	dropitem2[id] = g_iShopMenuItems[id][ITEM_SLOT_TWO];
+	color[0] = 255.0;
+	color[1] = 255.0;
+	color[2] = 255.0;
+	new NewItem;
+	
+	NewItem = create_entity("info_target");
+	entity_set_int(NewItem, EV_INT_renderfx, kRenderFxGlowShell);
+	entity_set_float(NewItem, EV_FL_renderamt, 150.0);
+	entity_set_int(NewItem, EV_INT_rendermode, kRenderTransAlpha);
+	// entity_set_vector(NewItem, EV_VEC_rendercolor, color);
+
+	entity_set_string(NewItem, EV_SZ_classname, "madness_drop");
+	entity_set_model(NewItem, "models/warcraft/madness_drop_v2.mdl");
+	
+	// set "madness_drop" entity's size
+	new Float:minbox[3] = { -0.5, -0.5, -0.5 }
+	new Float:maxbox[3] = { 0.3, 0.3, 0.3 };
+	entity_set_vector(NewItem,EV_VEC_mins,minbox);
+	entity_set_vector(NewItem,EV_VEC_maxs,maxbox);
+
+	new Float:g_origin[3];
+	// get player's origin
+	entity_get_vector(id, EV_VEC_origin, g_origin);
+	entity_set_origin(NewItem, g_origin);
+
+	entity_set_int(NewItem, EV_INT_effects, 32);
+	
+	entity_set_int(NewItem, EV_INT_solid, SOLID_TRIGGER);
+	
+	entity_set_int(NewItem, EV_INT_movetype, MOVETYPE_TOSS);
+	
+	entity_set_edict(NewItem, EV_ENT_owner, id);
+	VelocityByAim(id, 40 , velocity);
+	entity_set_vector(NewItem, EV_VEC_velocity, velocity);
 }
