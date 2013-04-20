@@ -20,18 +20,8 @@ public grenade_throw( index, greindex, wId )
 		ITEM_Glove_Begin( index );
 	}
 
-	static iSkillLevel, iSkillLevel2;
+	static iSkillLevel;
     iSkillLevel = SM_GetSkillLevel( index, SKILL_CRITICALGRENADE );
-    iSkillLevel2 = SM_GetSkillLevel( index, SKILL_EYE_OF_INSIGHT );
-
-    if ( greindex && (iSkillLevel2 > 0) )
-    {
-        if ( SHARED_IsGrenadeFlash( wId ) )
-        {
-            new iWidth = 15;
-            Create_TE_BEAMFOLLOW( greindex, g_iSprites[SPR_TRAIL], 20, iWidth, 20, 70, 120, 255 );
-        }
-    }
 
 	// Make sure the user has the skill and we actually have a grenade index
 	if ( greindex && iSkillLevel > 0 )
@@ -117,6 +107,7 @@ public client_damage( iAttacker, iVictim, iDamage, iWeapon, iHitPlace, TA )
 		BM_SkillsOffensive( iAttacker, iVictim, iDamage );
 		SH_SkillsOffensive( iAttacker, iVictim );
 		WA_SkillsOffensive( iAttacker, iVictim, iHitPlace );
+        NM_SkillsOffensive( iAttacker, iVictim, iHitPlace );
 		CL_SkillsOffensive( iAttacker, iVictim, iHitPlace );
 	}
 

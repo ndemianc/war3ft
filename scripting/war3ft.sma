@@ -190,8 +190,6 @@ public plugin_init()
 //	register_event( "ResetHUD"			, "on_ResetHud"		, "b"								);
 	register_event( "TextMsg"			, "on_GameRestart"	, "a"	, "2&#Game_will_restart_in" );
 	register_event( "HLTV"				, "EVENT_NewRound"	, "a"	, "1=0"	,			"2=0"	);
-    register_event("ScreenFade", "FlashEvent", "b", "4=255", "5=255", "6=255", "7>199");
-    register_forward(FM_EmitSound, "fw_emitsound");
 	register_dictionary( "war3FT.txt");
 
 	RegisterHam( Ham_TakeDamage, "player", "EVENT_TakeDamage" );

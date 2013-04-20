@@ -47,7 +47,7 @@ SM_Init()
 
     g_SkillOwner[SKILL_UNHOLY_RESURRECTION  ]   = RACE_NECROMANCER;
     g_SkillOwner[SKILL_BLACK_MANA           ]   = RACE_NECROMANCER;
-    g_SkillOwner[SKILL_EYE_OF_INSIGHT       ]   = RACE_NECROMANCER;
+    g_SkillOwner[SKILL_COLDSTRIKE           ]   = RACE_NECROMANCER;
     g_SkillOwner[ULTIMATE_BRAIN_SAP         ]   = RACE_NECROMANCER;
 
 	// Set up the skill types
@@ -97,7 +97,7 @@ SM_Init()
 
     g_SkillType[SKILL_UNHOLY_RESURRECTION   ]   = SKILL_TYPE_TRAINABLE;
     g_SkillType[SKILL_BLACK_MANA            ]   = SKILL_TYPE_TRAINABLE;
-    g_SkillType[SKILL_EYE_OF_INSIGHT        ]   = SKILL_TYPE_TRAINABLE;
+    g_SkillType[SKILL_COLDSTRIKE            ]   = SKILL_TYPE_TRAINABLE;
     g_SkillType[ULTIMATE_BRAIN_SAP          ]   = SKILL_TYPE_ULTIMATE;
 
 	// Set up the skill order
@@ -147,7 +147,7 @@ SM_Init()
 
     g_SkillOrder[SKILL_UNHOLY_RESURRECTION  ]   = SKILL_POS_1;
     g_SkillOrder[SKILL_BLACK_MANA           ]   = SKILL_POS_2;
-    g_SkillOrder[SKILL_EYE_OF_INSIGHT       ]   = SKILL_POS_3;
+    g_SkillOrder[SKILL_COLDSTRIKE           ]   = SKILL_POS_3;
     g_SkillOrder[ULTIMATE_BRAIN_SAP         ]   = SKILL_POS_4;
 }
 

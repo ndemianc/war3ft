@@ -179,7 +179,7 @@ new g_F_counter[33];    // number of respawn use for RACE_NECROMANCER
 #define CSW_ORB					60
 #define CSW_CONCOCTION			61
 #define CSW_BANISH				62
-#define CSW_EYE_OF_INSIGHT      63
+#define CSW_COLDSTRIKE          63
 #define CSW_BRAIN_SAP           64
 
 #define CSW_WAR3_MAX			64
@@ -555,7 +555,7 @@ new bool:g_bAnkhDisabled = false;
 // RACE_NECROMANCER
 #define SKILL_UNHOLY_RESURRECTION   36
 #define SKILL_BLACK_MANA            37
-#define SKILL_EYE_OF_INSIGHT        38
+#define SKILL_COLDSTRIKE            38
 #define ULTIMATE_BRAIN_SAP          39
 
 #define MAX_SKILLS				40
@@ -626,7 +626,7 @@ new const Float:p_orb[41] =				{0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1
 */
 
 // RACE_NECROMANCER
-new const Float:p_eye_of_insight[MAX_SKILL_LEVEL]  = {0.05,0.1,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25};    // RСкилл Око прозрения
+new const Float:p_cold_strike[MAX_SKILL_LEVEL]  = {0.05,0.1,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25};    // Скилл холодный удар 
 new const Float:p_black_mana[MAX_SKILL_LEVEL]    = {13.0,12.0,11.0,10.0,9.0,8.0,7.0,6.0,5.0,4.0,3.0,2.0,1.0};            // Скилл черная магия
 new const Float:p_unholy_resurrection[MAX_SKILL_LEVEL]  = {0.17,0.20,0.23,0.25,0.35,0.40,0.45,0.55,0.65,0.75,0.85,0.95,1.00};   // Возраждение мертвых
 
@@ -645,18 +645,18 @@ new const Float:p_vampiric[MAX_SKILL_LEVEL] = {0.03,
 0.39
 }; //Vampiric Aura (skill 1)
 new const p_invisibility[MAX_SKILL_LEVEL] = {190,
-183,
-176,
-169,
-162,
+185,
+180,
+175,
+170,
+165,
+160,
 155,
-148,
-141,
-134,
-127,
-120,
-113,
-106
+150,
+145,
+140,
+135,
+120
 }; //Invisibility (skill 1)
 new const Float:p_critical[MAX_SKILL_LEVEL] = {0.25,
 0.5,
