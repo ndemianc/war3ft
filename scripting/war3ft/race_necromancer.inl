@@ -186,7 +186,7 @@ NM_SkillsOffensive( iAttacker, iVictim, iHitPlace )
             get_user_origin( iAttacker, vAttackerOrigin );
 
             // Create the cold strike effect
-            Create_TE_SPRITETRAIL( vAttackerOrigin, vVictimOrigin, g_iSprites[SPR_SHADOWSTRIKE], 50, 15, 1, 2, 6 );
+            Create_TE_SPRITETRAIL( vAttackerOrigin, vVictimOrigin, g_iSprites[SPR_COLDSTRIKE], 50, 15, 1, 2, 6 );
 
             // Emit the shadow strike sound
             emit_sound( iVictim, CHAN_STATIC, g_szSounds[SOUND_IMPALE], 1.0, ATTN_NORM, 0, PITCH_NORM );

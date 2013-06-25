@@ -104,6 +104,7 @@ public WC3_Precache()
 	copy( g_szSprites[SPR_SHADOWSTRIKE]	, 63, "sprites/animglow01.spr" );
 	copy( g_szSprites[SPR_FIRE]			, 63, "sprites/explode1.spr" );
 	copy( g_szSprites[SPR_BURNING]		, 63, "sprites/xfire.spr" );
+  
 	// sdemian 	copy( g_szSprites[SPR_BEETLE]		, 63, "sprites/agrunt1.spr" );
 	copy( g_szSprites[SPR_BEETLE]		, 63, "sprites/crypt_beetle.spr" );
 	copy( g_szSprites[SPR_FIREBALL]		, 63, "sprites/zerogxplode.spr" );
@@ -127,7 +128,8 @@ public WC3_Precache()
 	copy( g_szRaceSprites[RACE_WARDEN]		, 63, "sprites/warcraft3/races/wc3_warden_01.spr"	);
 	copy( g_szRaceSprites[RACE_CRYPT]		, 63, "sprites/warcraft3/races/wc3_cryptlord_01.spr"	);
 	copy( g_szRaceSprites[RACE_CHAMELEON]	, 63, "sprites/warcraft3/races/wc3_chameleon_01.spr"	);
-    copy( g_szRaceSprites[RACE_NECROMANCER] , 63, "sprites/warcraft3/races/wc3_chameleon_01.spr"    );
+  copy( g_szRaceSprites[RACE_NECROMANCER] , 63, "sprites/warcraft3/races/wc3_chameleon_01.spr"    );
+	copy( g_szSprites[SPR_COLDSTRIKE]		, 63, "sprites/necromancer_coldstrike.spr" );
 
 	// Store level sprite names
 	for ( i = 0; i < MAX_LEVELS + 1; i++ )
@@ -532,6 +534,7 @@ public WC3_ResetGame()
 		// Remove player's items
 		ITEM_Remove( id, ITEM_SLOT_ONE );
 		ITEM_Remove( id, ITEM_SLOT_TWO );
+    ITEM_Remove( id, ITEM_SLOT_THREE );
 		
 		// Reset item info
 		g_bPlayerBoughtAnkh[id]		= false;
@@ -791,6 +794,24 @@ WC3_ShowBar( id )
 			pos += formatex( szItemInfo[pos], 256-pos, "%s", szItemName );
 		}
 	}
+  
+  // User has third item
+	if ( g_iShopMenuItems[id][ITEM_SLOT_THREE] > ITEM_NONE )
+	{
+		ITEM_Format( id, g_iShopMenuItems[id][ITEM_SLOT_THREE], szItemName, 31 )
+
+		// Then the string isn't empty and we have information in it (so we have a first item or second item)
+		if ( szItemInfo[0] )
+		{
+			pos += formatex( szItemInfo[pos], 256-pos, " %L %s", id, "WORD_AND", szItemName );
+		}
+
+		// We don't need the word "and"
+		else
+		{
+			pos += formatex( szItemInfo[pos], 256-pos, "%s", szItemName );
+		}
+	}
 
 	// Put the final string together
 	formatex( szString, 255, "%s^n%s", szRaceInfo, szItemInfo );
@@ -979,13 +1000,15 @@ WC3_ShowSpecInfo( id, iTargetID )
 	// Reset our position counter
 	//new pos = 0;
 
-	new szItemName[32], szItemName2[32];
+	new szItemName[32], szItemName2[32], szItemName3[32];
 
 	// Get the item and race names
 	LANG_GetItemName( g_iShopMenuItems[iTargetID][ITEM_SLOT_ONE], id, szItemName, 31, true );
 	LANG_GetItemName( g_iShopMenuItems[iTargetID][ITEM_SLOT_TWO], id, szItemName2, 31, true );
+  LANG_GetItemName( g_iShopMenuItems[iTargetID][ITEM_SLOT_THREE], id, szItemName3, 31, true );
 	
 	new bool:ItemSlotOne = false;
+  new bool:ItemSlotTwo = false;
 	new bool:HasMoreThanOneRing = false;
 	
 	if ( g_iTotalRings[iTargetID] > 1 )
@@ -1025,8 +1048,33 @@ WC3_ShowSpecInfo( id, iTargetID )
             else
                 iMsgPos += formatex( szMsg[iMsgPos], 512-iMsgPos, "^n%s", szItemName2 );
 		}
+		ItemSlotTwo = true;
+	}
+ 	// User has another item in slot three
+	if ( g_iShopMenuItems[iTargetID][ITEM_SLOT_THREE] > ITEM_NONE && g_iShopMenuItems[iTargetID][ITEM_SLOT_THREE] != ITEM_MOLE )
+	{
+		// Then the string isn't empty and we have information in it (so we have a first item)
+		if ( ItemSlotOne || ItemSlotTwo )
+		{
+			// Then they have rings, lets print how many there are
+            if (HasMoreThanOneRing && g_iShopMenuItems[iTargetID][ITEM_SLOT_THREE] == ITEM_RING)
+                iMsgPos += formatex( szMsg[iMsgPos], 512-iMsgPos, " %L %s x%d", id, "WORD_AND", szItemName3, g_iTotalRings[iTargetID] );
+            else
+                iMsgPos += formatex( szMsg[iMsgPos], 512-iMsgPos, " %L %s", id, "WORD_AND", szItemName3 );
+		}
+
+		// We don't need the word "and"
+		else
+		{
+			// Then they have rings, lets print how many there are
+            if (HasMoreThanOneRing && g_iShopMenuItems[iTargetID][ITEM_SLOT_THREE] == ITEM_RING)
+                iMsgPos += formatex( szMsg[iMsgPos], 512-iMsgPos, "^n%s x%d", szItemName3, g_iTotalRings[iTargetID] );
+            else
+                iMsgPos += formatex( szMsg[iMsgPos], 512-iMsgPos, "^n%s", szItemName3 );
+		}
 		
 	}
+ 
 
 
 	// Add the Health + Armor to the message
@@ -1965,6 +2013,8 @@ public sdemian_create_drop_item(id) {
 	new Float:color[3];
 	dropitem1[id] = g_iShopMenuItems[id][ITEM_SLOT_ONE];
 	dropitem2[id] = g_iShopMenuItems[id][ITEM_SLOT_TWO];
+  dropitem3[id] = g_iShopMenuItems[id][ITEM_SLOT_THREE];  
+
 	color[0] = 255.0;
 	color[1] = 255.0;
 	color[2] = 255.0;

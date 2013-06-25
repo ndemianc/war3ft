@@ -352,6 +352,7 @@ public _SHARED_Spawn( id )
 	// Reset items when the user spawns!
 	g_iShopMenuItems[id][ITEM_SLOT_ONE]	= ITEM_NONE;
 	g_iShopMenuItems[id][ITEM_SLOT_TWO] = ITEM_NONE;
+  g_iShopMenuItems[id][ITEM_SLOT_THREE] = ITEM_NONE;
 	
 	if ( is_user_alive( id ) )
 	{

@@ -22,7 +22,7 @@ new bool:bWardBombCheck = false;
 // Helper function to start the healing process
 public SH_HealingWave( id )
 {
-	if ( task_exists( id + TASK_WAVE ) == 0 )
+	if ( task_exists( id + TASK_WAVE ) != 1 )
 	{
 		_SH_HealingWave( id );
 	}

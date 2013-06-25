@@ -290,7 +290,7 @@ CL_SkillsOffensive( iAttacker, iVictim, iHitPlace )
 
 	//CSSB
 	new iSL = 2;
-	// Carrion Beetles (Жуки)
+	// Carrion Beetles
 	iSkillLevel = SM_GetSkillLevel( iAttacker, SKILL_CARRIONBEETLES );
 	if ( iSkillLevel > 0 )
 	{

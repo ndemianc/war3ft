@@ -626,9 +626,9 @@ new const Float:p_orb[41] =				{0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1
 */
 
 // RACE_NECROMANCER
-new const Float:p_cold_strike[MAX_SKILL_LEVEL]  = {0.05,0.1,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25};    // Скилл холодный удар 
-new const Float:p_black_mana[MAX_SKILL_LEVEL]    = {13.0,12.0,11.0,10.0,9.0,8.0,7.0,6.0,5.0,4.0,3.0,2.0,1.0};            // Скилл черная магия
-new const Float:p_unholy_resurrection[MAX_SKILL_LEVEL]  = {0.17,0.20,0.23,0.25,0.35,0.40,0.45,0.55,0.65,0.75,0.85,0.95,1.00};   // Возраждение мертвых
+new const Float:p_cold_strike[MAX_SKILL_LEVEL]  = {0.05,0.1,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25};
+new const Float:p_black_mana[MAX_SKILL_LEVEL]    = {13.0,12.0,11.0,10.0,9.0,8.0,7.0,6.0,5.0,4.0,3.0,2.0,1.0}; 
+new const Float:p_unholy_resurrection[MAX_SKILL_LEVEL]  = {0.17,0.20,0.23,0.25,0.35,0.40,0.45,0.55,0.65,0.75,0.85,0.95,1.00}; 
 
 new const Float:p_vampiric[MAX_SKILL_LEVEL] = {0.03,
 0.06,
@@ -801,19 +801,19 @@ new const Float:p_banish[MAX_SKILL_LEVEL] = {0.0307692,
 0.369231,
 0.4
 }; //Banish (skill 2)
-new const Float:p_hex[MAX_SKILL_LEVEL] = {0.0307692,
-0.0615385,
+new const Float:p_hex[MAX_SKILL_LEVEL] = {0.0230769,
+0.0461538,
+0.0692308,
 0.0923077,
-0.123077,
-0.153846,
+0.115385,
+0.138462,
+0.161538,
 0.184615,
-0.215385,
-0.246154,
+0.207692,
+0.230769,
+0.253846,
 0.276923,
-0.307692,
-0.338462,
-0.369231,
-0.4
+0.3
 }; //Hex (skill 2)
 new const Float:p_blink[MAX_SKILL_LEVEL] = {0.0769231,
 0.153846,
@@ -859,19 +859,19 @@ new const Float:p_levitation[MAX_SKILL_LEVEL] = {0.8,
 0.292306,
 0.246152
 }; //Levitation (skill 3)
-new const Float:p_bash[MAX_SKILL_LEVEL] = {0.0538462,
-0.107692,
+new const Float:p_bash[MAX_SKILL_LEVEL] = {0.0230769,
+0.0461538,
+0.0692308,
+0.0923077,
+0.115385,
+0.138462,
 0.161538,
-0.215385,
-0.269231,
-0.323077,
-0.376923,
-0.430769,
-0.484615,
-0.538462,
-0.592308,
-0.646154,
-0.7
+0.184615,
+0.207692,
+0.230769,
+0.253846,
+0.276923,
+0.3
 }; //Bash (skill 3)
 new const Float:p_ankh[MAX_SKILL_LEVEL] = {0.0769231,
 0.153846,
@@ -1170,7 +1170,7 @@ new g_szSounds[MAX_SOUNDS][64];
 #define SOUND_RESPAWNED     30
 
 // SPRITES
-#define MAX_SPRITES	15
+#define MAX_SPRITES	16
 
 new g_szSprites[MAX_SPRITES][64];
 new g_szRaceSprites[MAX_RACES + 1][64];
@@ -1197,6 +1197,7 @@ new bool:g_bExtraSpritesEnabled = false
 #define SPR_WAVE			12
 #define SPR_SMOKE			13
 #define SPR_IMMOLATE		14
+#define SPR_COLDSTRIKE 15
 
 // HUD Channels
 #define HUD_SPEC_INFO			1	// Info displayed in bottom corner of player being spectated
@@ -1240,3 +1241,4 @@ new bool:g_bCZBotRegisterHam
 */
 new dropitem1[33];
 new dropitem2[33];
+new dropitem3[33];

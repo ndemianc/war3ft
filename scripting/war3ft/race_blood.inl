@@ -12,7 +12,7 @@
 
 new bool:g_bPlayerBanished[33];
 
-//Супер навык - Ultimate
+//Ultimate
 public BM_ULT_Immolate( iCaster, iTarget )
 {
 	emit_sound( iCaster, CHAN_STATIC, g_szSounds[SOUND_IMMOLATE], 0.5, ATTN_NORM, 0, PITCH_NORM );
