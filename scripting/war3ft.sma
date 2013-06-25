@@ -410,7 +410,6 @@ public client_connect( id )
 	// User should have no items on connect...
 	g_iShopMenuItems[id][0] = -1;
 	g_iShopMenuItems[id][1] = -1;
-  g_iShopMenuItems[id][2] = -1;
 
 	// Automatically set their XP if it's enabled
 	if ( get_pcvar_num( CVAR_wc3_xp_auto_average ) && !get_pcvar_num( CVAR_wc3_save_xp ) )
@@ -748,47 +747,99 @@ public pfn_touch(ptr, ptd) {
 
 	if (equal(itemClassName, "madness_drop") && equal(playerClassname, "player")) {
 		new id = ptd;
-		new min_hp = 5;
-		new max_hp = 15;
-    new min_armor = 10;
-    new max_armor = 20;
-		new iMoneyBonus = 0;
-		new iHealthBonus = 0;
-    new iArmorBonus = 0;
+		new min_xp = 50;
+		new max_xp = 999;
+		new min_hp = 8;
+		new max_hp = 8;
+		new xp_amount = 0;
+		new money_amount = 0;
+		new iBonusHealth = 0;
 		/*
 		 * choise can be:
-		 * 0: Money
-		 * 1: Health
-		 * default: Armor
+		 * 0: xp
+		 * 1: money
+		 * 2: hp
 		*/
-    new owner = entity_get_edict(ptr, EV_ENT_owner);
-		new iChoise;
-    iChoise = random(3);
-
-    switch (iChoise) {
-      case 0:
-      {
-        if ( dropitem1[owner] != ITEM_NONE ) iMoneyBonus += floatround(0.5 * ITEM_Cost(id, dropitem1[owner]));
-        if ( dropitem2[owner] != ITEM_NONE ) iMoneyBonus += floatround(0.5 * ITEM_Cost(id, dropitem2[owner]));
-        if ( dropitem3[owner] != ITEM_NONE ) iMoneyBonus += floatround(0.5 * ITEM_Cost(id, dropitem3[owner]));
-      }
-      case 1:
-      {
-        iHealthBonus += (min_hp + random(max_hp));
-      }
-      default:
-      {
-        iArmorBonus += (min_armor + random(max_armor)); 
-      }
-    }
-		if (iHealthBonus > 0) {
+		new choise; 
+		new owner = entity_get_edict(ptr, EV_ENT_owner);
+		if (g_iShopMenuItems[id][ITEM_SLOT_ONE] != ITEM_NONE && g_iShopMenuItems[id][ITEM_SLOT_TWO] != ITEM_NONE) {
+			choise = random(3);
+			if (choise == 0) {
+				xp_amount += (min_xp + random(max_xp));
+			} else if (choise == 1) {
+				if (dropitem1[owner] != ITEM_NONE) {
+					money_amount += floatround(0.5 * (ITEM_Cost(id, dropitem1[owner])));
+				}
+				if (dropitem2[owner] != ITEM_NONE) {
+					money_amount += floatround(0.5 * (ITEM_Cost(id, dropitem2[owner])));
+				}
+			} else if (choise == 2) {
+				iBonusHealth += (min_hp + random(max_hp));
+			}
+		} else {
+			if (g_iShopMenuItems[id][ITEM_SLOT_ONE] == ITEM_NONE && g_iShopMenuItems[id][ITEM_SLOT_TWO] == ITEM_NONE) {
+				if (dropitem1[owner] != ITEM_NONE) {
+					ITEM_GiveItem(id, dropitem1[owner]);
+				}
+				if (dropitem2[owner] != ITEM_NONE) {
+					ITEM_GiveItem(id, dropitem2[owner]);
+				}
+			} else {
+				if (dropitem1[owner] != ITEM_NONE) {
+					if ((g_iShopMenuItems[id][ITEM_SLOT_ONE] == dropitem1[owner] || g_iShopMenuItems[id][ITEM_SLOT_ONE] == dropitem1[owner]) 
+						&& g_iFlag[g_iShopMenuItems[id][ITEM_SLOT_ONE]] != ITEM_CHARGEABLE) {
+						// so we give randomly xp or money or health
+						choise = random(3);
+						if (choise == 0) {
+							xp_amount += (min_xp + random(max_xp));
+						} else if (choise == 1) {
+							money_amount += floatround(0.5 * (ITEM_Cost(id, dropitem1[owner])));
+						} else if (choise == 2){
+							iBonusHealth += (min_hp + random(max_hp));
+						}
+					} else {
+						if (g_iShopMenuItems[id][ITEM_SLOT_ONE] == ITEM_NONE) {
+							ITEM_GiveItem(id, dropitem1[owner]);
+						} else {
+							if (g_iShopMenuItems[id][ITEM_SLOT_TWO] == ITEM_NONE) {
+								ITEM_GiveItem(id, dropitem1[owner]);
+							}
+						}
+					}
+				}
+				if (dropitem2[owner] != ITEM_NONE) {
+					if ((g_iShopMenuItems[id][ITEM_SLOT_ONE] == dropitem2[owner] || g_iShopMenuItems[id][ITEM_SLOT_ONE] == dropitem2[owner]) 
+						&& g_iFlag[g_iShopMenuItems[id][ITEM_SLOT_ONE]] != ITEM_CHARGEABLE) {
+						// so we give randomly xp or money or health
+						choise = random(3);
+						if (choise == 0) {
+							xp_amount += (min_xp + random(max_xp));
+						} else if (choise == 1) {
+							money_amount += floatround(0.5 * (ITEM_Cost(id, dropitem2[owner])));
+						} else if (choise == 2) {
+							iBonusHealth += (min_hp + random(max_hp));
+						}
+					} else {
+						if (g_iShopMenuItems[id][ITEM_SLOT_ONE] == ITEM_NONE) {
+							ITEM_GiveItem(id, dropitem2[owner]);
+						} else {
+							if (g_iShopMenuItems[id][ITEM_SLOT_TWO] == ITEM_NONE) {
+								ITEM_GiveItem(id, dropitem2[owner]);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if (iBonusHealth > 0) {
 			new iMaxHealth	= get_user_maxhealth( id );
-			new iHealth		  = get_user_health( id );
+			new iHealth		= get_user_health( id );
 			// Give the user health!
 			if ( iHealth < iMaxHealth )
 			{
 				// Then give the user his maximum health
-				if ( iHealth + iHealthBonus > iMaxHealth )
+				if ( iHealth + iBonusHealth > iMaxHealth )
 				{
 					set_user_health( id, iMaxHealth );
 				}
@@ -796,38 +847,28 @@ public pfn_touch(ptr, ptd) {
 				// Otherwise just give iMaxHealth
 				else
 				{
-					set_user_health( id, iHealth + iHealthBonus );
+					set_user_health( id, iHealth + iBonusHealth );
 				}
 				set_hudmessage(153, 204, 50, 0.40, 0.20, 0, 0.1, 2.5, 0.02, 0.02, -1);
-				show_hudmessage(id, "+%dHP", iHealthBonus);
+				show_hudmessage(id, "+%d hp", iBonusHealth);
+			} else {
+				// otherwise give +500$
+				xp_amount += 50;
 			}
+
 		}
 		
-		if (iMoneyBonus > 0) {
-			SHARED_SetUserMoney(id, SHARED_GetUserMoney(id) + iMoneyBonus, 1);
-			set_hudmessage(255, 99, 71, 0.60, 0.60, 0, 0.1, 2.5, 0.02, 0.02, -1);
-			show_hudmessage(id, "$%d", iMoneyBonus);
+		if (xp_amount > 0) {
+			set_hudmessage(0, 40, 80, 0.60, 0.30, 0, 0.1, 2.5, 0.02, 0.02, -1);
+			show_hudmessage(id, "%d xp", xp_amount);
+			ADMIN_SetXP(id, p_data[id][P_XP] + xp_amount);
 		}
-
-    if (iArmorBonus > 0) {
-      new CsArmorType:ArmorType;
-      new iCurArmor = cs_get_user_armor( id, ArmorType );
-      new iMaxArmor = SHARED_GetMaxArmor( id );
-      
-      // Then set their armor to be the max
-      if ( iCurArmor + iArmorBonus > iMaxArmor )
-      {
-        cs_set_user_armor( id, iMaxArmor, ArmorType );
-      }
-      
-      // Just give them some bonus armor
-      else
-      {
-        cs_set_user_armor( id, iCurArmor + iArmorBonus, ArmorType );
-      }
-      set_hudmessage(180, 180, 180, 0.40, 0.20, 0, 0.1, 2.5, 0.02, 0.02, -1);
-      show_hudmessage(id, "%dAR", iArmorBonus);
-    }
+		
+		if (money_amount > 0) {
+			SHARED_SetUserMoney(id, SHARED_GetUserMoney(id) + money_amount, 1);
+			set_hudmessage(255, 99, 71, 0.60, 0.60, 0, 0.1, 2.5, 0.02, 0.02, -1);
+			show_hudmessage(id, "$%d", money_amount);
+		}
 		// create nice green screen fade effect
 		Create_ScreenFade( ptd, (1<<10), (1<<10), (1<<12), 0, 255, 0, 20 );
 		remove_entity(ptr);

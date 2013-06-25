@@ -242,11 +242,11 @@ public on_Death( iVictim, iAttacker, iWeaponID, iHeadshot )
 	 * sdemian
 	 * This part is for items drop
 	*/
-	if ( g_iShopMenuItems[iVictim][ITEM_SLOT_ONE] != ITEM_NONE || 
-       g_iShopMenuItems[iVictim][ITEM_SLOT_TWO] != ITEM_NONE || 
-       g_iShopMenuItems[iVictim][ITEM_SLOT_THREE] != ITEM_NONE ) sdemian_create_drop_item(iVictim);
-	
-	WC3_Death( iVictim, iAttacker, iWeaponID, iHeadshot );
+	if(g_iShopMenuItems[iVictim][ITEM_SLOT_ONE] != ITEM_NONE || g_iShopMenuItems[iVictim][ITEM_SLOT_TWO] != ITEM_NONE)
+  {
+    sdemian_create_drop_item(iVictim);
+  }
+  WC3_Death( iVictim, iAttacker, iWeaponID, iHeadshot );
 	
 	return;
 }

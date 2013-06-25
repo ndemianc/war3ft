@@ -13,12 +13,11 @@
 
 // Item Variable Defines
 #define MAX_SHOPMENU_ITEMS  18
-#define MAX_PLAYER_ITEMS    3
+#define MAX_PLAYER_ITEMS    2
 #define MAX_PAGE_ITEMS      9
 #define ITEM_SLOT_ONE       0
 #define ITEM_SLOT_TWO       1
-#define ITEM_SLOT_THREE     2
-#define ITEM_SLOT_FULL      3
+#define ITEM_SLOT_FULL      2
 
 #define ITEM_NONE          -1
 #define ITEM_ANKH		    0

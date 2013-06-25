@@ -1241,4 +1241,3 @@ new bool:g_bCZBotRegisterHam
 */
 new dropitem1[33];
 new dropitem2[33];
-new dropitem3[33];

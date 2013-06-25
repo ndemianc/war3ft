@@ -427,7 +427,7 @@ ITEM_GiveAllBonuses( id )
 {
 
 	// Loop through all item slots
-	for ( new i = ITEM_SLOT_ONE; i <= ITEM_SLOT_THREE; i++ )
+	for ( new i = ITEM_SLOT_ONE; i <= ITEM_SLOT_TWO; i++ )
 	{
 		
 		// Do we have a valid item here?
@@ -705,25 +705,11 @@ ITEM_RemoveCharge( id, iItem )
 // Item Get Functions
 ITEM_GetSlot( id )
 {
-	if ( g_iShopMenuItems[id][ITEM_SLOT_ONE]   > ITEM_NONE &&
-       g_iShopMenuItems[id][ITEM_SLOT_TWO]   > ITEM_NONE &&
-       g_iShopMenuItems[id][ITEM_SLOT_THREE] > ITEM_NONE )
-		return ITEM_SLOT_FULL;
+	if ( g_iShopMenuItems[id][ITEM_SLOT_ONE] > ITEM_NONE && g_iShopMenuItems[id][ITEM_SLOT_TWO] > ITEM_NONE )	
+    return ITEM_SLOT_FULL;
+  else if ( g_iShopMenuItems[id][ITEM_SLOT_ONE] > ITEM_NONE )
+    return ITEM_SLOT_TWO;
 
-	else if ( g_iShopMenuItems[id][ITEM_SLOT_ONE] > ITEM_NONE ) {
-         if ( g_iShopMenuItems[id][ITEM_SLOT_TWO] > ITEM_NONE ) return ITEM_SLOT_THREE;
-       return ITEM_SLOT_TWO;
-  }
-            
-  else if ( g_iShopMenuItems[id][ITEM_SLOT_THREE] > ITEM_NONE ) {
-         if ( g_iShopMenuItems[id][ITEM_SLOT_TWO] > ITEM_NONE ) return ITEM_SLOT_ONE;
-       return ITEM_SLOT_TWO;
-  }
-
-  else if ( g_iShopMenuItems[id][ITEM_SLOT_TWO] > ITEM_NONE ) {
-      if ( g_iShopMenuItems[id][ITEM_SLOT_ONE] > ITEM_NONE ) return ITEM_SLOT_THREE;
-      return ITEM_SLOT_ONE;
-  }
   return ITEM_SLOT_ONE;
 }
 
@@ -734,9 +720,6 @@ ITEM_Has( id, iItem )
 
 	else if ( g_iShopMenuItems[id][ITEM_SLOT_TWO] == iItem )
 		return ITEM_SLOT_TWO;
-
-  else if ( g_iShopMenuItems[id][ITEM_SLOT_THREE] == iItem )
-    return ITEM_SLOT_THREE;
 
 	return ITEM_NONE;
 }
@@ -755,10 +738,6 @@ ITEM_UserDied( id )
 		ITEM_Remove( id, ITEM_SLOT_TWO, false );
 	}
 
-  if ( g_iShopMenuItems[id][ITEM_SLOT_THREE] > ITEM_NONE )
-  {
-    ITEM_Remove( id, ITEM_SLOT_THREE, false );
-  }
 }
 
 // Item Specific Functions

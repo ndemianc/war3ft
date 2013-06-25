@@ -636,23 +636,21 @@ public MENU_ReplaceItem( id )
 {
 
 	new szMenu[512] = "", pos = 0;
-	new iKeys = (1<<9)|(1<<0)|(1<<1)|(1<<2);
+	new iKeys = (1<<9)|(1<<0)|(1<<1);
 
 	// Add the menu header
 	pos += format( szMenu[pos], 511-pos, "%L^n^n", id, "MENU_REPLACE_ITEM" );
 
-	new szItemName[64], szItemName2[64], szItemName3[64];
+	new szItemName[64], szItemName2[64];
 	LANG_GetItemName( g_iShopMenuItems[id][ITEM_SLOT_ONE], id, szItemName, 63 );
 	LANG_GetItemName( g_iShopMenuItems[id][ITEM_SLOT_TWO], id, szItemName2, 63 );
-  LANG_GetItemName( g_iShopMenuItems[id][ITEM_SLOT_THREE], id, szItemName3, 63 );
 
 	// Add the items
-	pos += format( szMenu[pos], 511-pos, "\r1. %s^n", szItemName );
-	pos += format( szMenu[pos], 511-pos, "\r2. %s^n", szItemName2 );
-  pos += format( szMenu[pos], 511-pos, "\r3. %s^n", szItemName3 );
+	pos += format( szMenu[pos], 511-pos, "\w1. %s^n", szItemName );
+	pos += format( szMenu[pos], 511-pos, "\w2. %s^n", szItemName2 );
 
 	// Add the exit option
-	pos += format( szMenu[pos], 511-pos, "^n\d0. %L", id, "WORD_EXIT" );
+	pos += format( szMenu[pos], 511-pos, "^n\w0. %L", id, "WORD_EXIT" );
 
 	// Show the menu
 	show_menu( id, iKeys, szMenu, -1 );
@@ -677,10 +675,6 @@ public _menu_ReplaceItem( id, iKey )
 	{
 		ITEM_Remove( id, ITEM_SLOT_TWO )
 	}
-  else if ( iKey == 2 )
-  {
-    ITEM_Remove( id, ITEM_SLOT_THREE )
-  }
 
 	// Then the user typed "rings"
 	if ( g_iFutureItem[id] == -3 )
