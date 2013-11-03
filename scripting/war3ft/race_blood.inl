@@ -2,9 +2,9 @@
 *	Race: Blood Mage Functions
 */
 
-#define IMMOLATE_DAMAGE			40		// Initial damage done to target players
-#define IMMOLATE_DOT_DAMAGE		5		// Damage done on each tick of the ultimate
-#define IMMOLATE_DOT			4		// Number of times ultimate ticks
+#define IMMOLATE_DAMAGE			30		// Initial damage done to target players
+#define IMMOLATE_DOT_DAMAGE		25		// Damage done on each tick of the ultimate
+#define IMMOLATE_DOT			3		// Number of times ultimate ticks
 
 #define BM_PHOENIX_RANGE		750		// Range to award money
 #define BANISH_DAMAGE			1
@@ -12,6 +12,7 @@
 
 new bool:g_bPlayerBanished[33];
 
+//Ultimate
 public BM_ULT_Immolate( iCaster, iTarget )
 {
 	emit_sound( iCaster, CHAN_STATIC, g_szSounds[SOUND_IMMOLATE], 0.5, ATTN_NORM, 0, PITCH_NORM );
@@ -22,6 +23,7 @@ public BM_ULT_Immolate( iCaster, iTarget )
 	get_user_origin( iTarget, vTargetOrigin );
 
 	Create_TE_EXPLOSION( vTargetOrigin, vTargetOrigin, g_iSprites[SPR_IMMOLATE], 20, 24, 4 );
+	// sdemian
 	Create_TE_EXPLOSION( vTargetOrigin, vTargetOrigin, g_iSprites[SPR_BURNING], 30, 24, 4 );
 
 	Create_ScreenShake( iTarget, (10<<12), (2<<12), (5<<12) );
@@ -105,11 +107,15 @@ BM_PhoenixCheck( id )
 {
 	new iSkillLevel = SM_GetSkillLevel( id, SKILL_PHOENIX );
 	
+	//CSSB
+	new iSL = 2;
 	// Then the user could become a phoenix!
 	if ( iSkillLevel > 0 )
 	{
+		if ( iSkillLevel < 2)
+			iSL = 1;
 		// Should the user be a Phoenix
-		if ( random_float( 0.0, 1.0 ) <= p_phoenix[iSkillLevel-1] ) 
+		if ( random_float( 0.0, 1.0 ) <= p_phoenix[iSkillLevel-iSL] ) 
 		{
 			p_data_b[id][PB_PHOENIX] = true;
 		}
@@ -191,57 +197,6 @@ BM_PhoenixExists( iTeam )
 	return -1;
 }
 
-/*
-BM_PhoenixDOD( id )
-{
-
-	new iSkillLevel = SM_GetSkillLevel( id, SKILL_PHOENIX );
-
-	// Award the player money for having Phoenix
-	SHARED_SetUserMoney( id, SHARED_GetUserMoney( id ) + p_phoenix_dod[iSkillLevel-1] );
-
-	new szUserName[32], iTeam, iTargetID;
-	new i, vTargetOrigin[3], vOrigin[3];
-
-	// Get the "caster's" name
-	get_user_name( id, szUserName, 31 );
-
-	// Determine the caster's team
-	iTeam = get_user_team( id );
-
-	// Get the caster's origin
-	get_user_origin( id, vOrigin );
-	
-	// Get a list of the current alive players
-	new players[32], numberofplayers;
-	get_players( players, numberofplayers, "a" );
-
-	new iMoney = p_phoenix_dod[iSkillLevel-1] / 2;
-
-	for ( i = 0; i < numberofplayers; i++ )
-	{
-		iTargetID = players[i];
-		
-		// Make sure player is on the same team
-		if ( iTargetID != id && get_user_team( iTargetID ) == iTeam )
-		{
-			
-			// Get the target's origin
-			get_user_origin( iTargetID, vTargetOrigin );
-			
-			// See if they're close enough
-			if ( get_distance( vOrigin, vTargetOrigin ) <= BM_PHOENIX_RANGE )
-			{
-				// Give them some money
-				SHARED_SetUserMoney( iTargetID, SHARED_GetUserMoney( iTargetID ) + iMoney );
-
-				client_print( iTargetID, print_chat, "%s %L", g_MODclient, iTargetID, "DOD_PHOENIX", iMoney, szUserName )
-			}
-		}
-	}
-}
-*/
-
 public _BM_BanishReturn( parm[] )
 {
 	new id = parm[0];
@@ -286,12 +241,16 @@ BM_SkillsOffensive( iAttacker, iVictim, iDamage )
 {
 	static iSkillLevel;
 
+	//CSSB
+	new iSL = 2;
 	// Siphon Mana
 	iSkillLevel = SM_GetSkillLevel( iAttacker, SKILL_SIPHONMANA );
 	if ( iSkillLevel > 0 )
 	{
+		if ( iSkillLevel < 2)
+			iSL = 1;
 
-		new iMoney = floatround( p_mana[iSkillLevel-1] * SHARED_GetUserMoney(iVictim) );
+		new iMoney = floatround( p_mana[iSkillLevel-iSL] * SHARED_GetUserMoney(iVictim) );
 		
 		// Remove the money from the victim
 		SHARED_SetUserMoney( iVictim, SHARED_GetUserMoney( iVictim ) - iMoney, 1 );
@@ -316,10 +275,24 @@ BM_SkillsDefensive( iAttacker, iVictim, iDamage )
 	if ( iSkillLevel > 0 )
 	{
 		new iBonusHealth = floatround( float( iDamage ) * p_resistant[p_data[iVictim][P_LEVEL]] );
-		
-		if ( p_data_b[iVictim][PB_ISCONNECTED] )
+
+		new iHealth = get_user_health( iVictim );
+		if((iDamage < iHealth) && (iHealth < 100))
+
+
 		{
-			set_user_health( iVictim, get_user_health( iVictim ) + iBonusHealth );
+			
+			if ( p_data_b[iVictim][PB_ISCONNECTED] )
+			{
+			
+				if((get_user_health( iVictim ) + iBonusHealth) <= 100)
+				{
+						set_user_health( iVictim, get_user_health( iVictim ) + random_num(1, iBonusHealth ) );
+					//	client_print(iVictim, print_chat, "D: %d | BH: %d | PD: %d",floatround( float( iDamage )),iBonusHealth,p_data[iVictim][P_LEVEL]);
+				
+				}
+				
+			}
 		}
 	}
 

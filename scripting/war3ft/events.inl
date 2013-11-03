@@ -20,18 +20,8 @@ public grenade_throw( index, greindex, wId )
 		ITEM_Glove_Begin( index );
 	}
 
-	static iSkillLevel, iSkillLevel2;
+	static iSkillLevel;
     iSkillLevel = SM_GetSkillLevel( index, SKILL_CRITICALGRENADE );
-    iSkillLevel2 = SM_GetSkillLevel( index, SKILL_EYE_OF_INSIGHT );
-
-    if ( greindex && (iSkillLevel2 > 0) )
-    {
-        if ( SHARED_IsGrenadeFlash( wId ) )
-        {
-            new iWidth = 15;
-            Create_TE_BEAMFOLLOW( greindex, g_iSprites[SPR_TRAIL], 20, iWidth, 20, 70, 120, 255 );
-        }
-    }
 
 	// Make sure the user has the skill and we actually have a grenade index
 	if ( greindex && iSkillLevel > 0 )
@@ -117,6 +107,7 @@ public client_damage( iAttacker, iVictim, iDamage, iWeapon, iHitPlace, TA )
 		BM_SkillsOffensive( iAttacker, iVictim, iDamage );
 		SH_SkillsOffensive( iAttacker, iVictim );
 		WA_SkillsOffensive( iAttacker, iVictim, iHitPlace );
+        NM_SkillsOffensive( iAttacker, iVictim, iHitPlace );
 		CL_SkillsOffensive( iAttacker, iVictim, iHitPlace );
 	}
 
@@ -246,7 +237,16 @@ public on_Death( iVictim, iAttacker, iWeaponID, iHeadshot )
 		get_user_origin( iVictim, iReincarnation[iVictim] );
 	}
 
-	WC3_Death( iVictim, iAttacker, iWeaponID, iHeadshot );
+	
+	/*
+	 * sdemian
+	 * This part is for items drop
+	*/
+	if(g_iShopMenuItems[iVictim][ITEM_SLOT_ONE] != ITEM_NONE || g_iShopMenuItems[iVictim][ITEM_SLOT_TWO] != ITEM_NONE)
+  {
+    sdemian_create_drop_item(iVictim);
+  }
+  WC3_Death( iVictim, iAttacker, iWeaponID, iHeadshot );
 	
 	return;
 }
@@ -513,6 +513,16 @@ public EVENT_NewRound()
 	}
 
 	g_EndRound = false;
+	
+	/*
+	 * sdemian
+	 * This part is for items drop
+	*/
+	new del_items = 0;
+	do {
+		del_items = find_ent_by_class(del_items,"madness_drop");
+		if(del_items > 0) remove_entity(del_items);
+	} while(del_items);
 }
 
 // Called when a user looks somewhere

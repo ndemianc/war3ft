@@ -670,7 +670,6 @@ public _menu_ReplaceItem( id, iKey )
 	{
 		ITEM_Remove( id, ITEM_SLOT_ONE )
 	}
-
 	// Remove item from itemslot two
 	else if ( iKey == 1 )
 	{

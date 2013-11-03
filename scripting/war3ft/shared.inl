@@ -1,7 +1,7 @@
 /*
 *	Shared Functions
 */
-bool:SHARED_IsGrenadeFlash( iWeapon )
+stock bool:SHARED_IsGrenadeFlash( iWeapon )
 {
     if ( g_MOD == GAME_CSTRIKE || g_MOD == GAME_CZERO )
     {

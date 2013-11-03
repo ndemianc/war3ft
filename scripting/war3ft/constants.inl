@@ -179,7 +179,7 @@ new g_F_counter[33];    // number of respawn use for RACE_NECROMANCER
 #define CSW_ORB					60
 #define CSW_CONCOCTION			61
 #define CSW_BANISH				62
-#define CSW_EYE_OF_INSIGHT      63
+#define CSW_COLDSTRIKE          63
 #define CSW_BRAIN_SAP           64
 
 #define CSW_WAR3_MAX			64
@@ -555,7 +555,7 @@ new bool:g_bAnkhDisabled = false;
 // RACE_NECROMANCER
 #define SKILL_UNHOLY_RESURRECTION   36
 #define SKILL_BLACK_MANA            37
-#define SKILL_EYE_OF_INSIGHT        38
+#define SKILL_COLDSTRIKE            38
 #define ULTIMATE_BRAIN_SAP          39
 
 #define MAX_SKILLS				40
@@ -626,65 +626,65 @@ new const Float:p_orb[41] =				{0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1
 */
 
 // RACE_NECROMANCER
-new const Float:p_eye_of_insight[MAX_SKILL_LEVEL]  = {0.05,0.1,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25};    // RСкилл Око прозрения
-new const Float:p_black_mana[MAX_SKILL_LEVEL]    = {13.0,12.0,11.0,10.0,9.0,8.0,7.0,6.0,5.0,4.0,3.0,2.0,1.0};            // Скилл черная магия
-new const Float:p_unholy_resurrection[MAX_SKILL_LEVEL]  = {0.17,0.20,0.23,0.25,0.35,0.40,0.45,0.55,0.65,0.75,0.85,0.95,1.00};   // Возраждение мертвых
+new const Float:p_cold_strike[MAX_SKILL_LEVEL]  = {0.05,0.1,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25};
+new const Float:p_black_mana[MAX_SKILL_LEVEL]    = {13.0,12.0,11.0,10.0,9.0,8.0,7.0,6.0,5.0,4.0,3.0,2.0,1.0}; 
+new const Float:p_unholy_resurrection[MAX_SKILL_LEVEL]  = {0.17,0.20,0.23,0.25,0.35,0.40,0.45,0.55,0.65,0.75,0.85,0.95,1.00}; 
 
-new const Float:p_vampiric[MAX_SKILL_LEVEL] = {0.05,
-0.1,
+new const Float:p_vampiric[MAX_SKILL_LEVEL] = {0.03,
+0.06,
+0.09,
+0.12,
 0.15,
-0.2,
-0.25,
+0.18,
+0.21,
+0.24,
+0.27,
 0.3,
-0.35,
-0.4,
-0.45,
-0.5,
-0.55,
-0.6,
-0.65
+0.33,
+0.36,
+0.39
 }; //Vampiric Aura (skill 1)
 new const p_invisibility[MAX_SKILL_LEVEL] = {190,
-183,
-176,
-169,
-162,
+185,
+180,
+175,
+170,
+165,
+160,
 155,
-148,
-141,
-134,
-127,
-120,
-113,
-106
+150,
+145,
+140,
+135,
+120
 }; //Invisibility (skill 1)
-new const Float:p_critical[MAX_SKILL_LEVEL] = {0.5,
+new const Float:p_critical[MAX_SKILL_LEVEL] = {0.25,
+0.5,
+0.75,
 1.0,
-1.1,
-1.2,
-1.3,
+1.25,
 1.5,
+1.75,
 2.0,
+2.25,
 2.5,
+2.75,
 3.0,
-3.5,
-4.0,
-4.5,
-5.0
+3.25
 }; //Critical Strike (skill 1)
-new const Float:p_evasion[MAX_SKILL_LEVEL] = {0.047619,
-0.0952381,
-0.142857,
-0.190476,
-0.238095,
-0.285714,
-0.333333,
-0.380952,
-0.428571,
-0.47619,
-0.52381,
-0.571429,
-0.619048
+new const Float:p_evasion[MAX_SKILL_LEVEL] = {0.0384615,
+0.0769231,
+0.115385,
+0.153846,
+0.192308,
+0.230769,
+0.269231,
+0.307692,
+0.346154,
+0.384615,
+0.423077,
+0.461538,
+0.5
 }; //Evasion (skill 1)
 new const Float:p_phoenix[MAX_SKILL_LEVEL] = {0.0769231,
 0.153846,
@@ -758,20 +758,20 @@ new Float:p_unholy[MAX_SKILL_LEVEL] =  {240.0,
 295.0,
 300.0
 }; //Unholy Aura (skill 2)
-new const p_devotion = 10 //Devotion Aura (skill 2)
-new const Float:p_grenade[MAX_SKILL_LEVEL] = {0.5,
-1.0,
-1.5,
+new const p_devotion = 8 //Devotion Aura (skill 2)
+new const Float:p_grenade[MAX_SKILL_LEVEL] = {0.4,
+0.8,
+1.2,
+1.6,
 2.0,
-2.5,
-3.0,
-3.5,
+2.4,
+2.8,
+3.2,
+3.6,
 4.0,
-4.5,
-5.0,
-5.5,
-6.0,
-6.5
+4.4,
+4.8,
+5.2
 }; //Critical Grenade (skill 2)
 new const Float:p_thorns[MAX_SKILL_LEVEL] = {0.01,
 0.02,
@@ -787,21 +787,35 @@ new const Float:p_thorns[MAX_SKILL_LEVEL] = {0.01,
 0.12,
 0.13
 }; //Thorns Aura (skill 2)
-new const Float:p_banish[MAX_SKILL_LEVEL] = {0.0538462,
-0.107692,
-0.161538,
+new const Float:p_banish[MAX_SKILL_LEVEL] = {0.0307692,
+0.0615385,
+0.0923077,
+0.123077,
+0.153846,
+0.184615,
 0.215385,
-0.269231,
-0.323077,
-0.376923,
-0.430769,
-0.484615,
-0.538462,
-0.592308,
-0.646154,
-0.7
+0.246154,
+0.276923,
+0.307692,
+0.338462,
+0.369231,
+0.4
 }; //Banish (skill 2)
-new const Float:p_hex[MAX_SKILL_LEVEL] = {0.0769231,
+new const Float:p_hex[MAX_SKILL_LEVEL] = {0.0230769,
+0.0461538,
+0.0692308,
+0.0923077,
+0.115385,
+0.138462,
+0.161538,
+0.184615,
+0.207692,
+0.230769,
+0.253846,
+0.276923,
+0.3
+}; //Hex (skill 2)
+new const Float:p_blink[MAX_SKILL_LEVEL] = {0.0769231,
 0.153846,
 0.230769,
 0.307692,
@@ -814,34 +828,20 @@ new const Float:p_hex[MAX_SKILL_LEVEL] = {0.0769231,
 0.846154,
 0.923077,
 1.0
-}; //Hex (skill 2)
-new const Float:p_blink[MAX_SKILL_LEVEL] = {0.153846,
-0.307692,
-0.461538,
-0.615385,
-0.769231,
-0.923077,
-1.07692,
-1.23077,
-1.38462,
-1.53846,
-1.69231,
-1.84615,
-2.0
 }; //Blink (skill 2)
-new const Float:p_spiked[MAX_SKILL_LEVEL] = {0.001,
-0.002,
-0.003,
-0.004,
-0.005,
-0.006,
-0.007,
-0.008,
-0.009,
-0.01,
-0.011,
-0.012,
-0.013
+new const Float:p_spiked[MAX_SKILL_LEVEL] = {0.01,
+0.02,
+0.03,
+0.04,
+0.05,
+0.06,
+0.07,
+0.08,
+0.09,
+0.1,
+0.11,
+0.12,
+0.13
 }; //Spiked Carapace (skill 2)
 
 //Skills 3
@@ -859,19 +859,19 @@ new const Float:p_levitation[MAX_SKILL_LEVEL] = {0.8,
 0.292306,
 0.246152
 }; //Levitation (skill 3)
-new const Float:p_bash[MAX_SKILL_LEVEL] = {0.0769231,
-0.153846,
+new const Float:p_bash[MAX_SKILL_LEVEL] = {0.0230769,
+0.0461538,
+0.0692308,
+0.0923077,
+0.115385,
+0.138462,
+0.161538,
+0.184615,
+0.207692,
 0.230769,
-0.307692,
-0.384615,
-0.461538,
-0.538462,
-0.615385,
-0.692308,
-0.769231,
-0.846154,
-0.923077,
-1.0
+0.253846,
+0.276923,
+0.3
 }; //Bash (skill 3)
 new const Float:p_ankh[MAX_SKILL_LEVEL] = {0.0769231,
 0.153846,
@@ -887,33 +887,33 @@ new const Float:p_ankh[MAX_SKILL_LEVEL] = {0.0769231,
 0.923077,
 1.0
 }; //Equipment reincarnation (skill 3)
-new const Float:p_trueshot[MAX_SKILL_LEVEL] = {0.01,
-0.02,
-0.03,
+new const Float:p_trueshot[MAX_SKILL_LEVEL] = {0.02,
 0.04,
-0.05,
 0.06,
-0.07,
 0.08,
-0.09,
 0.1,
-0.11,
 0.12,
-0.13
+0.14,
+0.16,
+0.18,
+0.2,
+0.22,
+0.24,
+0.26
 }; //Trueshot Aura (skill 3)
-new const Float:p_mana[MAX_SKILL_LEVEL] = {0.01,
-0.02,
-0.03,
+new const Float:p_mana[MAX_SKILL_LEVEL] = {0.02,
 0.04,
-0.05,
 0.06,
-0.07,
 0.08,
-0.09,
 0.1,
-0.11,
 0.12,
-0.13
+0.14,
+0.16,
+0.18,
+0.2,
+0.22,
+0.24,
+0.26
 }; //Siphon Mana (skill 3)
 new const p_serpent[MAX_SKILL_LEVEL] = {1,
 2,
@@ -929,19 +929,19 @@ new const p_serpent[MAX_SKILL_LEVEL] = {1,
 12,
 13
 }; //Serpent Ward (skill 3)
-new const Float:p_shadow[MAX_SKILL_LEVEL] = {0.0769231,
-0.153846,
+new const Float:p_shadow[MAX_SKILL_LEVEL] = {0.0461538,
+0.0923077,
+0.138462,
+0.184615,
 0.230769,
-0.307692,
-0.384615,
+0.276923,
+0.323077,
+0.369231,
+0.415385,
 0.461538,
-0.538462,
-0.615385,
-0.692308,
-0.769231,
-0.846154,
-0.923077,
-1.0
+0.507692,
+0.553846,
+0.6
 }; //Shadow Strike (skill 3)
 new const Float:p_carrion[MAX_SKILL_LEVEL] = {0.0384615,
 0.0769231,
@@ -1043,47 +1043,47 @@ new const Float:p_concoction[MAX_LEVELS+1] = {0.000487805,
 0.0195122,
 0.02
 }; //Unstable Concoction (skill 4)
-new const Float:p_harden[MAX_LEVELS+1] = {0.000487805,
-0.00097561,
-0.00146341,
-0.00195122,
-0.00243902,
-0.00292683,
-0.00341463,
-0.00390244,
-0.00439024,
-0.00487805,
-0.00536585,
-0.00585366,
-0.00634146,
-0.00682927,
-0.00731707,
-0.00780488,
-0.00829268,
-0.00878049,
-0.00926829,
-0.0097561,
-0.0102439,
-0.0107317,
-0.0112195,
-0.0117073,
-0.0121951,
-0.0126829,
-0.0131707,
-0.0136585,
-0.0141463,
-0.0146341,
-0.015122,
-0.0156098,
-0.0160976,
-0.0165854,
-0.0170732,
-0.017561,
-0.0180488,
-0.0185366,
-0.0190244,
-0.0195122,
-0.02
+new const Float:p_harden[MAX_LEVELS+1] = {0.0243902,
+0.0487805,
+0.0731707,
+0.097561,
+0.121951,
+0.146341,
+0.170732,
+0.195122,
+0.219512,
+0.243902,
+0.268293,
+0.292683,
+0.317073,
+0.341463,
+0.365854,
+0.390244,
+0.414634,
+0.439024,
+0.463415,
+0.487805,
+0.512195,
+0.536585,
+0.560976,
+0.585366,
+0.609756,
+0.634146,
+0.658537,
+0.682927,
+0.707317,
+0.731707,
+0.756098,
+0.780488,
+0.804878,
+0.829268,
+0.853659,
+0.878049,
+0.902439,
+0.926829,
+0.95122,
+0.97561,
+1.0
 }; //Hardened Skin (skill 4)
 new const Float:p_orb[MAX_LEVELS+1] = {0.000487805,
 0.00097561,
@@ -1170,7 +1170,7 @@ new g_szSounds[MAX_SOUNDS][64];
 #define SOUND_RESPAWNED     30
 
 // SPRITES
-#define MAX_SPRITES	15
+#define MAX_SPRITES	16
 
 new g_szSprites[MAX_SPRITES][64];
 new g_szRaceSprites[MAX_RACES + 1][64];
@@ -1197,6 +1197,7 @@ new bool:g_bExtraSpritesEnabled = false
 #define SPR_WAVE			12
 #define SPR_SMOKE			13
 #define SPR_IMMOLATE		14
+#define SPR_COLDSTRIKE 15
 
 // HUD Channels
 #define HUD_SPEC_INFO			1	// Info displayed in bottom corner of player being spectated
@@ -1233,3 +1234,10 @@ new g_iPlayerTeam[33];
 #define BOT_CAST_ULT_CHANCE		0.10
 
 new bool:g_bCZBotRegisterHam
+
+/*
+ * sdemian
+ * This part is for items drop
+*/
+new dropitem1[33];
+new dropitem2[33];

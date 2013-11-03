@@ -23,13 +23,6 @@ ITEM_Init()
 	ITEM_COST[ITEM_RING]	    = 1000;			// Ring of Regeneration + 1
 	ITEM_COST[ITEM_CHAMELEON]	= 9000;			// Chameleon
 	ITEM_COST[ITEM_MOLE]	    = 12500;		// Mole
-
-	// Item costs are a little different for DOD
-	if ( g_MOD == GAME_DOD )
-	{
-		ITEM_COST[ITEM_SCROLL]	= 800;
-	}
-
 	// Items are chargeable
 	g_iFlag[ITEM_NECKLACE]	|= ITEM_CHARGEABLE;
 	g_iFlag[ITEM_HELM]		|= ITEM_CHARGEABLE;
@@ -712,13 +705,12 @@ ITEM_RemoveCharge( id, iItem )
 // Item Get Functions
 ITEM_GetSlot( id )
 {
-	if ( g_iShopMenuItems[id][ITEM_SLOT_ONE] > ITEM_NONE && g_iShopMenuItems[id][ITEM_SLOT_TWO] > ITEM_NONE )
-		return ITEM_SLOT_FULL;
+	if ( g_iShopMenuItems[id][ITEM_SLOT_ONE] > ITEM_NONE && g_iShopMenuItems[id][ITEM_SLOT_TWO] > ITEM_NONE )	
+    return ITEM_SLOT_FULL;
+  else if ( g_iShopMenuItems[id][ITEM_SLOT_ONE] > ITEM_NONE )
+    return ITEM_SLOT_TWO;
 
-	else if ( g_iShopMenuItems[id][ITEM_SLOT_ONE] > ITEM_NONE )
-		return ITEM_SLOT_TWO;
-
-	return ITEM_SLOT_ONE;
+  return ITEM_SLOT_ONE;
 }
 
 ITEM_Has( id, iItem )
@@ -745,6 +737,7 @@ ITEM_UserDied( id )
 	{
 		ITEM_Remove( id, ITEM_SLOT_TWO, false );
 	}
+
 }
 
 // Item Specific Functions

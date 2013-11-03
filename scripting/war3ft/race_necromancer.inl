@@ -1,4 +1,6 @@
-#define LINE_WITH 80 // Ширина полоски 
+#define COLDSTRIKE_DAMAGE            10
+
+#define LINE_WITH                      80 // Ширина полоски 
 // Скилл воскрешение {
 
 public respawn_menu(id) {
@@ -166,6 +168,51 @@ public _MN_BlackMana(idUser) {
     return;
 }
 
+NM_SkillsOffensive( iAttacker, iVictim, iHitPlace )
+{
+
+    static iSkillLevel;
+
+    // Cold Strike
+    iSkillLevel = SM_GetSkillLevel( iAttacker, SKILL_COLDSTRIKE );
+    if ( iSkillLevel > 0 )
+    {
+
+        if ( random_float( 0.0, 1.0 ) <= p_cold_strike[iSkillLevel-1] )
+        {
+
+            new vVictimOrigin[3], vAttackerOrigin[3]
+            get_user_origin( iVictim, vVictimOrigin );
+            get_user_origin( iAttacker, vAttackerOrigin );
+
+            // Create the cold strike effect
+            Create_TE_SPRITETRAIL( vAttackerOrigin, vVictimOrigin, g_iSprites[SPR_COLDSTRIKE], 50, 15, 1, 2, 6 );
+
+            // Emit the shadow strike sound
+            emit_sound( iVictim, CHAN_STATIC, g_szSounds[SOUND_IMPALE], 1.0, ATTN_NORM, 0, PITCH_NORM );
+
+            // slow the enemy
+            if (!SHARED_IsPlayerSlowed(iVictim)) {
+                SHARED_GlowShell(iVictim, 0, 255, 255, 2.0, 18);
+                p_data_b[iVictim][PB_STUNNED] = true;
+                SHARED_SetSpeed(iVictim);
+                set_task(1.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + iVictim);
+            }
+
+            // Damage the user
+            WC3_Damage( iVictim, iAttacker, COLDSTRIKE_DAMAGE, CSW_COLDSTRIKE, iHitPlace );
+        }
+
+        else if ( get_pcvar_num( CVAR_wc3_psychostats ) )
+        {
+            new WEAPON = CSW_COLDSTRIKE - CSW_WAR3_MIN;
+
+            iStatsShots[iAttacker][WEAPON]++;
+        }
+    }
+}
+
+/*
 public FlashEvent(id) {
     if (!is_user_alive(id)) {
         return;
@@ -173,10 +220,11 @@ public FlashEvent(id) {
 
 
     new Duration, HoldTime, Fade, Alpha;
-    Duration = read_data(1)
-    HoldTime = read_data(2)
-    Fade = read_data(3)
-    Alpha = read_data(7)
+    Duration = read_data(1);
+    HoldTime = read_data(2);
+    Fade = read_data(3);
+    Alpha = read_data(7);
+    Alpha = Alpha>50?Alpha-50:50;
 
     new players[32], numberofplayers, targetid;
     new iTeam = get_user_team(id);
@@ -205,47 +253,41 @@ public FlashEvent(id) {
                         write_byte(0) // Alpha
                         message_end()
 
-                        message_begin(MSG_ONE, gmsgScreenFade, {
-                            0, 0, 0
-                        }, id)
-                        write_short(Duration) // Duration
-                        write_short(HoldTime) // Hold time
-                        write_short(Fade) // Fade type
-                        write_byte(0) // Red
-                        write_byte(255) // Green
-                        write_byte(255) // Blue
-                        write_byte(Alpha) // Alpha
-                        message_end()
-
                         if (!SHARED_IsPlayerSlowed(id)) {
                             SHARED_GlowShell(id, 0, 255, 255, 2.0, 18);
                             p_data_b[id][PB_STUNNED] = true;
                             SHARED_SetSpeed(id);
-                            set_task(2.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + id);
+                            set_task(1.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + id);
                         }
                     } else {
                         message_begin(MSG_ONE, gmsgScreenFade, {
                             0, 0, 0
                         }, id)
-                        write_short(Duration) // Duration
-                        write_short(HoldTime) // Hold time
-                        write_short(Fade) // Fade type
+                        write_short(0) // Duration
+                        write_short(0) // Hold time
+                        write_short(0) // Fade type
                         write_byte(0) // Red
-                        write_byte(255) // Green
-                        write_byte(255) // Blue
-                        write_byte(Alpha) // Alpha
+                        write_byte(0) // Green
+                        write_byte(0) // Blue
+                        write_byte(0) // Alpha
                         message_end()
 
                         if (!SHARED_IsPlayerSlowed(id)) {
                             SHARED_GlowShell(id, 0, 255, 255, 2.0, 18);
                             p_data_b[id][PB_STUNNED] = true;
                             SHARED_SetSpeed(id);
-                            set_task(2.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + id);
+                            set_task(1.0, "SHARED_ResetMaxSpeed", TASK_RESETSPEED + id);
                         }
+                        
+                        static Float:punchangle[3];
+                        pev(id, pev_punchangle, punchangle);
+        
+                        punchangle[0] += random_float(-5.0, 5.0);
+                        punchangle[1] += random_float(-5.0, 5.0);
+                        punchangle[2] += random_float(-5.0, 5.0);
 
-                        set_pev(id, pev_punchangle, Float: {
-                            125.0, 125.0, 125.0
-                        })
+                        // this will shake the user's monitor a little bit
+                        set_pev(id, pev_punchangle, punchangle);
 
                         new iDamage, iBonusDamage;
                         iBonusDamage = 110;
@@ -268,7 +310,7 @@ public FlashEvent(id) {
         }
     }
 }
-
+*/
 
 public fw_emitsound(entity, channel, const sample[], Float: volume, Float: attenuation, fFlags, pitch) {
     if (!equali(sample, "weapons/flashbang-1.wav") && !equali(sample, "weapons/flashbang-2.wav")) return FMRES_IGNORED

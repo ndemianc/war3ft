@@ -22,7 +22,7 @@ new bool:bWardBombCheck = false;
 // Helper function to start the healing process
 public SH_HealingWave( id )
 {
-	if ( !task_exists( id + TASK_WAVE ) )
+	if ( task_exists( id + TASK_WAVE ) != 1 )
 	{
 		_SH_HealingWave( id );
 	}
@@ -53,10 +53,14 @@ public _SH_HealingWave( id )
 		return;
 	}
 
+	//CSSB
+	new iSL = 1; // sdemian return iSL to be equal to 1
 	// Continue healing...
 	if ( is_user_alive( id ) )
 	{
-		set_task( p_heal[iSkillLevel-1], "_SH_HealingWave", TASK_WAVE + id );
+		if ( iSkillLevel < 2)
+			iSL = 1;
+		set_task( p_heal[iSkillLevel-iSL], "_SH_HealingWave", TASK_WAVE + id );
 	}
 	
 	// Prevent healing if this player is hexed
@@ -80,19 +84,19 @@ public _SH_HealingWave( id )
 		// User is on the caster's team
 		if ( p_data_b[targetid][PB_ISCONNECTED] && get_user_team( targetid ) == iTeam )
 		{
-			get_user_origin( targetid, targetorigin );
-			
-			// User is close enough
-			if ( get_distance(origin, targetorigin) < SH_HEALING_WAVE_RANGE )
+			if ( is_user_alive( targetid ) )
 			{
-				get_user_origin( targetid, origin )
-				
-				// User needs health
-				if ( get_user_health( targetid ) + 1 <= get_user_maxhealth( targetid ) )
+				get_user_origin( targetid, targetorigin );
+				// User is close enough
+				if ( get_distance(origin, targetorigin) < SH_HEALING_WAVE_RANGE )
 				{
-					set_user_health( targetid, get_user_health( targetid ) + 1 );
-
-					Create_TE_IMPLOSION( origin, 100, 8, 1 );
+					get_user_origin( targetid, origin )
+					// User needs health
+					if ( get_user_health( targetid ) + 1 <= get_user_maxhealth( targetid ) )
+					{
+						set_user_health( targetid, get_user_health( targetid ) + 1 );
+						Create_TE_IMPLOSION( origin, 100, 8, 1 );
+					}
 				}
 			}
 		}
@@ -148,13 +152,17 @@ SH_SerpentWard( id )
 	static iSkillLevel;
 
 	iSkillLevel = SM_GetSkillLevel( id, SKILL_SERPENTWARD );
+	//CSSB
+	new iSL = 1;
 
 	// User should have some!
 	if ( iSkillLevel > 0 )
 	{
 
+		if ( iSkillLevel < 2)
+			iSL = 1;
 		// Then we can give the user a serpent ward!
-		while ( g_SH_SerpentGiven[id] < p_serpent[iSkillLevel-1] )
+		while ( g_SH_SerpentGiven[id] < p_serpent[iSkillLevel-iSL] )
 		{
 			// Increase the available serpent wards
 			p_data[id][P_SERPENTCOUNT]++;
@@ -490,9 +498,13 @@ SH_SkillsOffensive( iAttacker, iVictim )
 	// Hex
 	iSkillLevel = SM_GetSkillLevel( iAttacker, SKILL_HEX );
 
+	//CSSB
+	new iSL = 1;
 	if ( iSkillLevel > 0 )
 	{
-		if ( random_float( 0.0, 1.0 ) <= p_hex[iSkillLevel-1] )
+		if ( iSkillLevel < 2)
+			iSL = 1;
+		if ( random_float( 0.0, 1.0 ) <= p_hex[iSkillLevel-iSL] )
 		{
 						
 			// We need to identify the victim as slowed + hexed			
