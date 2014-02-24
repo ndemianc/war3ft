@@ -659,18 +659,18 @@ new const p_invisibility[MAX_SKILL_LEVEL] = {190,
 120
 }; //Invisibility (skill 1)
 new const Float:p_critical[MAX_SKILL_LEVEL] = {0.25,
-0.5,
 0.75,
-1.0,
 1.25,
-1.5,
 1.75,
 2.0,
 2.25,
 2.5,
 2.75,
 3.0,
-3.25
+3.25,
+3.5,
+3.75,
+4.0
 }; //Critical Strike (skill 1)
 new const Float:p_evasion[MAX_SKILL_LEVEL] = {0.0384615,
 0.0769231,

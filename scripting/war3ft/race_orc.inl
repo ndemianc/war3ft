@@ -4,7 +4,7 @@
 
 #define CHAINLIGHTNING_DAMAGE			50		// Initial ultimate damage
 #define CHAINLIGHTNING_LINEWIDTH		80		// Width of the lightning sprite
-#define CRITICAL_STRIKE_CHANCE			0.15	// 15% chance of Critical Strike working
+#define CRITICAL_STRIKE_CHANCE			0.21	// 15% chance of Critical Strike working
 
 // Initial Ultimate call
 public OR_ULT_ChainLightning( iCaster, iTarget, iBodyPart )

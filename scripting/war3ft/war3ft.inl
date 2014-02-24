@@ -1190,6 +1190,15 @@ public WC3_Damage( iVictim, iAttacker, iDamage, iWeapon, iBodyPart )
 		}
 	}
 
+	// this is tricky
+	// I am going to reduce all damage done by primary or secondary weapon, by 75%
+  
+  if (SHARED_IsPrimaryWeapon(iWeapon) || SHARED_IsSecondaryWeapon(iWeapon)
+  {
+    WC3_Log(true, "iWeapon = '%d'", iWeapon);
+	  iDamage = floatround( iDamage * 0.25 );
+  }
+
 	// Psychostats Statistics is turned on!
 	if ( get_pcvar_num( CVAR_wc3_psychostats ) )
 	{
