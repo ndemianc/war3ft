@@ -198,29 +198,6 @@ SHARED_IsPrimaryWeapon( iWeaponID )
 	return false;
 }
 
-/* sdemian
-* Function checks to see if the weapon id os a secondary weapon (used forWC3_Damage function)
-*/
-SHARED_IsSecondaryWeapon( iWeaponID )
-{
-  // Check for Counter-Strike or Condition Zero
-  if ( g_MOD == GAME_CSTRIKE || g_MOD == GAME_CZERO )
-  {
-    if ( iWeaponID == CSW_USP || iWeaponID == CSW_GLOCK18 || iWeaponID == CSW_DEAGLE || iWeaponID == CSW_P228 || iWeaponID == CSW_ELITE || iWeaponID == CSW_FIVESEVEN )
-    {
-      return true;
-    }
-  }
-  // Check for Day of Defeat
-  else if ( g_MOD == GAME_DOD )
-  {
-    return false;
-  }
-
-  return false;
-}
-
-
 // Function will return the user's money
 SHARED_GetUserMoney( id )
 {

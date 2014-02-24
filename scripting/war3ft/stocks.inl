@@ -36,7 +36,7 @@ stock SHARED_IsSecondaryWeapon( iWeaponID )
 	// Check for Day of Defeat
 	else if ( g_MOD == GAME_DOD )
 	{
-
+    return false;
 	}
 
 
