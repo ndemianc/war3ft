@@ -2,7 +2,7 @@
 *	Race: Undead Scourge Functions
 */
 
-#define EXPLOSION_MAX_DAMAGE	50
+#define EXPLOSION_MAX_DAMAGE	60
 #define EXPLOSION_RANGE			300
 #define EXPLOSION_BLAST_RADIUS	250
 

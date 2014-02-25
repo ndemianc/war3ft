@@ -217,6 +217,7 @@ OR_SkillsOffensive( iAttacker, iVictim, iWeapon, iDamage, iHitPlace )
 				static iMaxHealth, iBonusDamage;
 				iMaxHealth = get_user_maxhealth( iVictim );
 				iBonusDamage = floatround( float( iDamage ) * p_grenade[iSkillLevel-1] );
+        
 				
 				// We don't want to do more damage than the user's maximum health
 				if ( iBonusDamage + iDamage >= iMaxHealth )
@@ -225,7 +226,7 @@ OR_SkillsOffensive( iAttacker, iVictim, iWeapon, iDamage, iHitPlace )
 				}
 				
 				// Damage the user!
-				WC3_Damage( iVictim, iAttacker, iBonusDamage, iWeapon, iHitPlace );
+				WC3_Damage( iVictim, iAttacker, iBonusDamage + iDamage, iWeapon, iHitPlace );
 
 				// Make the user glow
 				SHARED_Glow( iVictim, iBonusDamage, 0, 0, 0 );
